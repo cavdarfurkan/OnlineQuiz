@@ -1,7 +1,13 @@
 const bcrypt = require("bcrypt");
 const userRepository = require("../repositories/userRepository");
+const { validationResult } = require("express-validator");
 
 const login = async (req, res) => {
+  const errors = validationResult(req).formatWith(({ msg }) => msg);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
   const { email, password } = req.body;
   const user = await userRepository.getUserByEmail(email);
 
@@ -35,16 +41,9 @@ const login = async (req, res) => {
 };
 
 const signup = async (req, res) => {
-  if (
-    !req.body.firstname ||
-    !req.body.lastname ||
-    !req.body.email ||
-    !req.body.password ||
-    !req.body.role
-  ) {
-    return res
-      .status(400)
-      .send("You must send firstname, lastname, email, password and role");
+  const errors = validationResult(req).formatWith(({ msg }) => msg);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
   }
 
   await userRepository.getUserByEmail(req.body.email).then(async (user) => {
