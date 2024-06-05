@@ -6,7 +6,7 @@ class Role {
   static get fields() {
     return [
       "id INT AUTO_INCREMENT PRIMARY KEY",
-      "role_name VARCHAR(255) NOT NULL",
+      "role_name VARCHAR(255) NOT NULL UNIQUE",
     ];
   }
 

@@ -6,9 +6,7 @@ const getPool = async () => {
   if (!_pool) {
     await _createDatabase();
     _pool = mysql.createPool(config);
-    console.log("Connected to database");
   }
-
   return _pool;
 };
 
@@ -23,8 +21,6 @@ const _createDatabase = async () => {
   const query = `CREATE DATABASE IF NOT EXISTS ${config.database}`;
   await connection.execute(query);
   await connection.end();
-
-  console.log(`Database ${config.database} created`);
 };
 
 module.exports = getPool;

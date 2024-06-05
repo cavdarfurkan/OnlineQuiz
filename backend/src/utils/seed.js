@@ -1,4 +1,5 @@
 const getPool = require("../utils/db");
+const bcrypt = require("bcrypt");
 const Course = require("../models/course");
 const Teacher = require("../models/teacher");
 const Student = require("../models/student");
@@ -6,6 +7,8 @@ const User = require("../models/user");
 const Exam = require("../models/exam");
 const Question = require("../models/question");
 const Role = require("../models/role");
+
+const defaultPassword = bcrypt.hashSync("password", 10);
 
 const tables = [
   {
@@ -19,14 +22,14 @@ const tables = [
     fields: User.fields,
     keys: User.keys,
     data: [
-      new User("John", "Doe", "johndoe@example.com", "password"),
-      new User("Jane", "Doe", "janedoe@example.com", "password"),
-      new User("Alice", "Smith", "examplee@example.com", "password"),
-      new User("Furkan", "Cavdar", "example@example.com", "password"),
+      new User("John", "Doe", "johndoe@example.com", defaultPassword),
+      new User("Jane", "Doe", "janedoe@example.com", defaultPassword),
+      new User("Alice", "Smith", "examplee@example.com", defaultPassword),
+      new User("Furkan", "Cavdar", "example@example.com", defaultPassword),
     ],
   },
   {
-    name: "users_roles",
+    name: "user_roles",
     fields: [
       "user_id INT NOT NULL",
       "role_id INT NOT NULL",

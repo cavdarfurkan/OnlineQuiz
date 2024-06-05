@@ -1,41 +1,88 @@
-const User = require("../models/user");
+const bcrypt = require("bcrypt");
 const userRepository = require("../repositories/userRepository");
 
 const login = async (req, res) => {
-  const rows = await userRepository.getAllUsers();
-  res.send(rows);
+  const { email, password } = req.body;
+  const user = await userRepository.getUserByEmail(email);
+
+  if (!user || !bcrypt.compareSync(password, user.password)) {
+    return res.status(401).json({ message: "Invalid email or password" });
+  }
+
+  const userRoles = await userRepository.getUserRoles(user.id);
+
+  req.session.save(() => {
+    req.session.logged_in = true;
+    req.session.user = {
+      id: user.id,
+      email: user.email,
+      firstname: user.first_name,
+      lastname: user.last_name,
+      roles: userRoles,
+    };
+
+    return res.status(200).json({
+      user: {
+        id: user.id,
+        email: user.email,
+        firstname: user.first_name,
+        lastname: user.last_name,
+        role: userRoles,
+      },
+      message: "Logged in successfully",
+    });
+  });
 };
 
-// const signup = (req, res) => {
-//   if (!req.body.email || !req.body.password) {
-//     return res.status(400).send("You must send the email and the password");
-//   }
+const signup = async (req, res) => {
+  if (
+    !req.body.firstname ||
+    !req.body.lastname ||
+    !req.body.email ||
+    !req.body.password ||
+    !req.body.role
+  ) {
+    return res
+      .status(400)
+      .send("You must send firstname, lastname, email, password and role");
+  }
 
-//   User.findOne({ email: req.body.email }, (err, existingUser) => {
-//     if (err) {
-//       return res.status(500).send("An error occurred");
-//     }
+  await userRepository.getUserByEmail(req.body.email).then(async (user) => {
+    if (user) {
+      return res.status(409).send("That email is already taken");
+    }
 
-//     if (existingUser) {
-//       return res.status(409).send("That email is already taken");
-//     }
+    const userPassword = bcrypt.hashSync(req.body.password, 10);
 
-//     const user = new User({
-//       email: req.body.email,
-//       password: req.body.password,
-//     });
+    await userRepository
+      .createUser(
+        req.body.firstname,
+        req.body.lastname,
+        req.body.email,
+        userPassword,
+        req.body.role
+      )
+      .then(() => {
+        return res.status(201).send("Signed up successfully");
+      })
+      .catch((err) => {
+        console.error(err);
+        return res.status(500).send(err || "An error occurred");
+      });
+  });
+};
 
-//     user.save((err) => {
-//       if (err) {
-//         return res.status(500).send("An error occurred");
-//       }
+const logout = async (req, res) => {
+  req.session.logged_in = false;
+  req.session.user = null;
 
-//       return res.status(201).send("Signed up successfully");
-//     });
-//   });
-// };
+  req.session.destroy(() => {
+    res.status(204).end();
+  });
+};
 
 module.exports = {
   login,
   signup,
+  logout,
 };
