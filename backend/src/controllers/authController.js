@@ -16,6 +16,10 @@ const login = async (req, res) => {
   }
 
   const userRoles = await userRepository.getUserRoles(user.id);
+  const role = req.query.role;
+  if (!userRoles.includes(role)) {
+    return res.status(403).json({ message: "Unauthorized" });
+  }
 
   req.session.save(() => {
     req.session.logged_in = true;
@@ -24,7 +28,7 @@ const login = async (req, res) => {
       email: user.email,
       firstname: user.first_name,
       lastname: user.last_name,
-      roles: userRoles,
+      role: role,
     };
 
     return res.status(200).json({
@@ -33,7 +37,7 @@ const login = async (req, res) => {
         email: user.email,
         firstname: user.first_name,
         lastname: user.last_name,
-        role: userRoles,
+        role: role,
       },
       message: "Logged in successfully",
     });

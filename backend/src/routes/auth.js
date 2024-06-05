@@ -1,26 +1,24 @@
 const router = require("express").Router();
 const authController = require("../controllers/authController");
-const {
-  emailValidator,
-  passwordValidator,
-  firstnameValidator,
-  lastnameValidator,
-  roleValidator,
-} = require("../utils/validators");
+const { authValidators } = require("../utils/validators");
 
 router.post(
   "/login",
-  [emailValidator(), passwordValidator()],
+  [
+    authValidators.emailValidator(),
+    authValidators.passwordValidator(),
+    authValidators.roleQueryValidator(),
+  ],
   authController.login
 );
 router.post(
   "/signup",
   [
-    emailValidator(),
-    passwordValidator(),
-    firstnameValidator(),
-    lastnameValidator(),
-    roleValidator(),
+    authValidators.emailValidator(),
+    authValidators.passwordValidator(),
+    authValidators.firstnameValidator(),
+    authValidators.lastnameValidator(),
+    authValidators.roleValidator(),
   ],
   authController.signup
 );
