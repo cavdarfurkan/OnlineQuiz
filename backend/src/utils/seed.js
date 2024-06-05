@@ -1,44 +1,122 @@
 const getPool = require("../utils/db");
 const Course = require("../models/course");
+const Teacher = require("../models/teacher");
+const Student = require("../models/student");
+const User = require("../models/user");
+const Exam = require("../models/exam");
+const Question = require("../models/question");
+const Role = require("../models/role");
 
 const tables = [
   {
-    name: "courses",
-    fields: [
-      "id INT AUTO_INCREMENT PRIMARY KEY",
-      "name VARCHAR(255) NOT NULL",
-      "description TEXT",
-      "credits INT NOT NULL",
-    ],
-    keys: ["name", "description", "credits"],
+    name: "roles",
+    fields: Role.fields,
+    keys: Role.keys,
+    data: [new Role("teacher"), new Role("student"), new Role("admin")],
+  },
+  {
+    name: "users",
+    fields: User.fields,
+    keys: User.keys,
     data: [
-      new Course("Math", "Mathematics", 3),
-      new Course("Science", "Science", 3),
-      new Course("History", "History", 3),
-      new Course("English", "English", 3),
-      new Course("Computer Science", "Computer Science", 3),
+      new User("John", "Doe", "johndoe@example.com", "password"),
+      new User("Jane", "Doe", "janedoe@example.com", "password"),
+      new User("Alice", "Smith", "examplee@example.com", "password"),
+      new User("Furkan", "Cavdar", "example@example.com", "password"),
+    ],
+  },
+  {
+    name: "users_roles",
+    fields: [
+      "user_id INT NOT NULL",
+      "role_id INT NOT NULL",
+      "FOREIGN KEY (user_id) REFERENCES users(id)",
+      "FOREIGN KEY (role_id) REFERENCES roles(id)",
+    ],
+    keys: ["user_id", "role_id"],
+    data: [
+      [1, 1],
+      [2, 2],
+      [3, 2],
+      [4, 1],
+      [4, 2],
+      [4, 3],
+    ],
+  },
+  {
+    name: "courses",
+    fields: Course.fields,
+    keys: Course.keys,
+    data: [
+      new Course(
+        "CS101",
+        "Introduction to Computer Science",
+        "An introductory course to computer science",
+        "2021-09-15",
+        1
+      ),
+      new Course(
+        "CS102",
+        "Data Structures",
+        "A course about data structures",
+        "2021-09-15",
+        1
+      ),
+      new Course(
+        "CS103",
+        "Algorithms",
+        "A course about algorithms",
+        "2021-09-15",
+        1
+      ),
+    ],
+  },
+  {
+    name: "student_courses",
+    fields: [
+      "student_id INT NOT NULL",
+      "course_id INT NOT NULL",
+      "FOREIGN KEY (student_id) REFERENCES users(id)",
+      "FOREIGN KEY (course_id) REFERENCES courses(id)",
+    ],
+    keys: ["student_id", "course_id"],
+    data: [
+      [2, 1],
+      [2, 2],
+      [2, 3],
+      [3, 1],
+      [3, 2],
+      [3, 3],
     ],
   },
   {
     name: "exams",
-    fields: [
-      "id INT AUTO_INCREMENT PRIMARY KEY",
-      "name VARCHAR(255) NOT NULL",
-      "subject TEXT",
-      "date DATE NOT NULL",
-    ],
-    keys: ["name", "subject", "date"],
+    fields: Exam.fields,
+    keys: Exam.keys,
     data: [
-      { name: "Midterm", subject: "Math", date: "2021-10-15" },
-      { name: "Final", subject: "Math", date: "2021-12-15" },
-      { name: "Midterm", subject: "Science", date: "2021-10-15" },
-      { name: "Final", subject: "Science", date: "2021-12-15" },
-      { name: "Midterm", subject: "History", date: "2021-10-15" },
-      { name: "Final", subject: "History", date: "2021-12-15" },
-      { name: "Midterm", subject: "English", date: "2021-10-15" },
-      { name: "Final", subject: "English", date: "2021-12-15" },
-      { name: "Midterm", subject: "Computer Science", date: "2021-10-15" },
-      { name: "Final", subject: "Computer Science", date: "2021-12-15" },
+      new Exam("Midterm", "2021-10-15", 90, 1),
+      new Exam("Final", "2021-12-15", 120, 1),
+      new Exam("Midterm", "2021-10-15", 90, 2),
+      new Exam("Final", "2021-12-15", 120, 2),
+      new Exam("Midterm", "2021-10-15", 90, 3),
+      new Exam("Final", "2021-12-15", 120, 3),
+    ],
+  },
+  {
+    name: "student_exams",
+    fields: [
+      "student_id INT NOT NULL",
+      "exam_id INT NOT NULL",
+      "grade INT",
+      "FOREIGN KEY (student_id) REFERENCES users(id)",
+      "FOREIGN KEY (exam_id) REFERENCES exams(id)",
+    ],
+    keys: ["student_id", "exam_id", "grade"],
+    data: [
+      [2, 1, null],
+      [2, 2, 90],
+      [3, 1, 85],
+      [3, 2, 95],
     ],
   },
 ];
@@ -48,8 +126,11 @@ async function seedDatabase() {
     const pool = await getPool();
 
     for (const table of tables) {
-      console.log(`Creating table ${table.name}`);
+      await pool.execute("SET foreign_key_checks = 0");
       await pool.execute(`DROP TABLE IF EXISTS ${table.name}`);
+      await pool.execute("SET foreign_key_checks = 1");
+
+      console.log(`Creating table ${table.name}`);
       await pool.execute(
         `CREATE TABLE IF NOT EXISTS ${table.name} (${table.fields.join(", ")});`
       );
@@ -67,63 +148,9 @@ async function seedDatabase() {
     }
 
     await pool.end();
-
-    // Insert course data into courses table
-    // for (const course of courses) {
-    //   await conn.query(
-    //     "INSERT INTO courses(name, description, credits) VALUES (?, ?, ?);",
-    //     [course.name, course.description, course.credits]
-    //   );
-    // }
-    // // Insert teacher data into teachers table
-    // for (const teacher of teachers) {
-    //   await conn.query(
-    //     "INSERT INTO teachers(name, subject, office_hours) VALUES (?, ?, ?);",
-    //     [teacher.name, teacher.subject, teacher.officeHours]
-    //   );
-    // }
-    // // Insert student data into teachers table
-    // for (const student of students) {
-    //   await conn.query(
-    //     "INSERT INTO students(name, subject, grade) VALUES (?, ?, ?);",
-    //     [student.name, student.subject, student.grade]
-    //   );
-    // }
-    // // Insert exam data into teachers table
-    // for (const exam of exams) {
-    //   await conn.query(
-    //     "INSERT INTO exams(name, subject, date) VALUES (?, ?, ?);",
-    //     [exam.name, exam.subject, exam.date]
-    //   );
-    // }
-
-    // console.log("Database seeded successfully.");
-    // await pool.destroy();
   } catch (error) {
     console.error("Error:", error);
   }
-}
-
-async function createTables(pool) {
-  //   // Create teachers table
-  //   await conn.query(`
-  //         CREATE TABLE IF NOT EXISTS teachers (
-  //             id INT AUTO_INCREMENT PRIMARY KEY,
-  //             name VARCHAR(255) NOT NULL,
-  //             subject TEXT,
-  //             office_hours INT NOT NULL);
-  //     `);
-
-  //   // Create students table
-  //   await conn.query(`
-  //   CREATE TABLE IF NOT EXISTS students (
-  //       id INT AUTO_INCREMENT PRIMARY KEY,
-  //       name VARCHAR(255) NOT NULL,
-  //       subject TEXT,
-  //       grade INT NOT NULL);
-  //     `);
-
-  console.log("Database tables created.");
 }
 
 seedDatabase();
