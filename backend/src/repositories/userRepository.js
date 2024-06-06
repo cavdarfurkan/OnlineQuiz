@@ -1,6 +1,12 @@
 const getPool = require("../utils/db");
 const roleRepository = require("./roleRepository");
 
+async function getUserById(id) {
+  const pool = await getPool();
+  const [rows] = await pool.execute("SELECT * FROM users WHERE id = ?", [id]);
+  return rows[0];
+}
+
 async function getUserByEmail(email) {
   const pool = await getPool();
   const [rows] = await pool.execute("SELECT * FROM users WHERE email = ?", [
@@ -64,16 +70,8 @@ async function createUser(firstName, lastName, email, password, role) {
     });
 }
 
-// async function getAllUsersByRole(role) {
-//   const pool = await getPool();
-//   const [rows] = await pool.execute(
-//     "SELECT users.* FROM users JOIN user_roles ON users.id = user_roles.user_id JOIN roles ON user_roles.role_id = roles.id WHERE roles.role_name = ?",
-//     [role]
-//   );
-//   return rows;
-// }
-
 module.exports = {
+  getUserById,
   getUserByEmail,
   getAllUsers,
   getUserRoles,
