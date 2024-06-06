@@ -55,7 +55,7 @@ class Course {
       "name VARCHAR(255) NOT NULL",
       "description TEXT",
       "start_date DATE",
-      "teacher_id INT NOT NULL",
+      "teacher_id INT",
       "invitation_code VARCHAR(255) NOT NULL UNIQUE",
       "is_archived BOOLEAN DEFAULT FALSE",
       "FOREIGN KEY (teacher_id) REFERENCES users(id)",

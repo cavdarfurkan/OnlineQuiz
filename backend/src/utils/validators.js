@@ -11,20 +11,6 @@ const authValidators = {
       .withMessage("Invalid email")
       .normalizeEmail()
       .escape(),
-  passwordValidator: () =>
-    body("password")
-      .notEmpty()
-      .withMessage("Password is required")
-      .isLength({ min: 5 })
-      .withMessage("Password must be minimum 5 characters")
-      .escape(),
-  // confirmPasswordValidator: () =>
-  //   body("confirmPassword").custom((value, { req }) => {
-  //     if (value !== req.body.password) {
-  //       throw new Error("Passwords do not match");
-  //     }
-  //     return true;
-  //   }),
   firstnameValidator: () =>
     body("firstname")
       .notEmpty()
@@ -58,12 +44,6 @@ const authValidators = {
 };
 
 const courseValidators = {
-  idParamValidator: () =>
-    param("id")
-      .notEmpty()
-      .withMessage("ID is required")
-      .isInt()
-      .withMessage("ID must be an integer"),
   shortNameValidator: () =>
     body("short_name")
       .notEmpty()
@@ -145,59 +125,64 @@ const courseUpdateValidators = {
     body("start_date").optional().isISO8601().withMessage("Invalid date"),
 };
 
-// const courseEnrollmentValidators = {
-//   courseIdValidator: () =>
-//     body("course_id")
-//       .notEmpty()
-//       .withMessage("Course ID is required")
-//       .isInt()
-//       .withMessage("Course ID must be an integer")
-//       .custom(async (value) => {
-//         const course = await courseRepository.getCourseById(value);
-//         if (!course) {
-//           throw new Error("Course not found");
-//         }
-//         return true;
-//       }),
-//   studentIdValidator: () =>
-//     body("student_id")
-//       .notEmpty()
-//       .withMessage("Student ID is required")
-//       .isInt()
-//       .withMessage("Student ID must be an integer")
-//       .custom(async (value) => {
-//         const user = await userRepository.getUserById(value);
-//         if (!user) {
-//           throw new Error("Student not found");
-//         }
-//         const roles = await userRepository.getUserRoles(user.id);
-//         if (!roles.includes("student")) {
-//           throw new Error("User is not a student");
-//         }
-//         return true;
-//       }),
-//   invitationCodeValidator: () =>
-//     body("invitation_code")
-//       .notEmpty()
-//       .withMessage("Invitation code is required")
-//       .isLength({ min: 6 })
-//       .withMessage("Invitation code must be 6 characters")
-//       .isAlphanumeric()
-//       .withMessage("Invitation code must be alphanumeric")
-//       .custom(async (value, { req }) => {
-//         const course = await courseRepository.getCourseByInvitationCode(value);
-//         if (!course) {
-//           throw new Error("Course not found");
-//         }
-//         if (course.teacher_id === req.session.user.id) {
-//           throw new Error("Teacher cannot enroll in own course");
-//         }
-//         return true;
-//       }),
-// };
+const userUpdateValidators = {
+  emailValidator: () =>
+    body("email")
+      .optional()
+      .isEmail()
+      .withMessage("Invalid email")
+      .normalizeEmail()
+      .escape(),
+  firstnameValidator: () =>
+    body("firstname")
+      .optional()
+      .isLength({ min: 2 })
+      .withMessage("Firstname is too short")
+      .trim()
+      .escape(),
+  lastnameValidator: () =>
+    body("lastname")
+      .optional()
+      .isLength({ min: 2 })
+      .withMessage("Lastname is too short")
+      .trim()
+      .escape(),
+};
+
+const passwordValidator = {
+  passwordValidator: () =>
+    body("password")
+      .notEmpty()
+      .withMessage("Password is required")
+      .isLength({ min: 5 })
+      .withMessage("Password must be minimum 5 characters")
+      .escape(),
+  confirmPasswordValidator: () =>
+    body("confirm_password")
+      .notEmpty()
+      .withMessage("Confirm password is required")
+      .custom((value, { req }) => {
+        if (value !== req.body.password) {
+          throw new Error("Passwords do not match");
+        }
+        return true;
+      }),
+};
+
+const commonValidators = {
+  idParamValidator: () =>
+    param("id")
+      .notEmpty()
+      .withMessage("ID is required")
+      .isInt()
+      .withMessage("ID must be an integer"),
+};
 
 module.exports = {
   authValidators,
   courseValidators,
   courseUpdateValidators,
+  userUpdateValidators,
+  passwordValidator,
+  commonValidators,
 };

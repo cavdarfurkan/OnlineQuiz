@@ -1,5 +1,6 @@
 const getPool = require("../utils/db");
 const roleRepository = require("./roleRepository");
+const courseRepository = require("./courseRepository");
 
 async function getUserById(id) {
   const pool = await getPool();
@@ -70,10 +71,59 @@ async function createUser(firstName, lastName, email, password, role) {
     });
 }
 
+async function updateUser(id, clause) {
+  const pool = await getPool();
+  const [result] = await pool.execute(
+    `UPDATE users SET ${clause} WHERE id = ?`,
+    [id]
+  );
+  return result.affectedRows;
+}
+
+async function deleteUser(id) {
+  const pool = await getPool();
+  const connection = await pool.getConnection();
+
+  await connection.beginTransaction();
+
+  try {
+    await connection.execute(
+      "UPDATE courses SET is_archived = 1 WHERE teacher_id = ?",
+      [id]
+    );
+
+    // Orphane the courses that the user is teaching
+    const user = await getUserById(id);
+    if (!user) {
+      await connection.rollback();
+      return Promise.reject("User not found");
+    }
+
+    const courses = await courseRepository.getAllCoursesByTeacherId(id);
+    for (const course of courses) {
+      await connection.execute(
+        "UPDATE courses SET teacher_id = NULL WHERE id = ?",
+        [course.id]
+      );
+    }
+
+    await connection.execute("DELETE FROM user_roles WHERE user_id = ?", [id]);
+    await connection.execute("DELETE FROM users WHERE id = ?", [id]);
+
+    await connection.commit();
+    return Promise.resolve();
+  } catch (error) {
+    await connection.rollback();
+    return Promise.reject(error);
+  }
+}
+
 module.exports = {
   getUserById,
   getUserByEmail,
   getAllUsers,
   getUserRoles,
   createUser,
+  updateUser,
+  deleteUser,
 };
