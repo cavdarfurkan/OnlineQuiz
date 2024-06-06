@@ -7,6 +7,7 @@ const { authenticate } = require("./middleware/authMiddlewares");
 const authRouter = require("./routes/auth");
 const courseRouter = require("./routes/course");
 const userRouter = require("./routes/user");
+const examRouter = require("./routes/exam");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -20,6 +21,11 @@ app.use(authenticate);
 app.use("/api/auth", authRouter);
 app.use("/api/courses", courseRouter);
 app.use("/api/users", userRouter);
+app.use("/api/exams", examRouter);
+
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

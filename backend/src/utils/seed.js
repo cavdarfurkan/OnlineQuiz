@@ -99,12 +99,12 @@ const tables = [
     fields: Exam.fields,
     keys: Exam.keys,
     data: [
-      new Exam("Midterm", "2021-10-15", 90, 1),
-      new Exam("Final", "2021-12-15", 120, 1),
-      new Exam("Midterm", "2021-10-15", 90, 2),
-      new Exam("Final", "2021-12-15", 120, 2),
-      new Exam("Midterm", "2021-10-15", 90, 3),
-      new Exam("Final", "2021-12-15", 120, 3),
+      new Exam("Midterm", "2021-10-15", 90, 50, 1),
+      new Exam("Final", "2021-12-15", 120, 50, 1),
+      new Exam("Midterm", "2021-10-15", 90, 60, 2),
+      new Exam("Final", "2021-12-15", 120, 50, 2),
+      new Exam("Midterm", "2021-10-15", 90, 50, 3),
+      new Exam("Final", "2021-12-15", 120, 50, 3),
     ],
   },
   {
@@ -122,6 +122,7 @@ const tables = [
       [2, 2, 90],
       [3, 1, 85],
       [3, 2, 95],
+      [3, 3, 45],
     ],
   },
 ];

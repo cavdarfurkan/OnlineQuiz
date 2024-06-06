@@ -158,6 +158,97 @@ const userUpdateValidators = {
       .escape(),
 };
 
+const examValidators = {
+  courseIdQueryValidator: () =>
+    query("courseId").isInt().withMessage("ID must be an integer"),
+  courseIdValidator: () =>
+    body("course_id")
+      .notEmpty()
+      .withMessage("Course ID is required")
+      .isInt()
+      .withMessage("Course ID must be an integer")
+      .custom(async (value) => {
+        const course = await courseRepository.getCourseById(value);
+        if (!course) {
+          throw new Error("Course not found");
+        }
+        return true;
+      }),
+  titleValidator: () =>
+    body("title")
+      .notEmpty()
+      .withMessage("Title is required")
+      .isLength({ min: 3 })
+      .withMessage("Title is too short")
+      .trim()
+      .escape(),
+  dateValidator: () =>
+    body("date")
+      .notEmpty()
+      .withMessage("Date is required")
+      .isISO8601()
+      .withMessage("Invalid date")
+      .escape(),
+  durationValidator: () =>
+    body("duration_min")
+      .notEmpty()
+      .withMessage("Duration is required")
+      .isInt()
+      .withMessage("Duration must be an integer")
+      .custom((value) => {
+        if (value < 1) {
+          throw new Error("Duration must be greater than 0");
+        }
+        return true;
+      }),
+  passPercentValidator: () =>
+    body("pass_percent")
+      .optional()
+      .isInt()
+      .withMessage("Pass percent must be an integer")
+      .custom((value) => {
+        if (value < 1 || value > 100) {
+          throw new Error("Pass percent must be between 1 and 100");
+        }
+        return true;
+      }),
+};
+
+const examUpdateValidators = {
+  titleValidator: () =>
+    body("title")
+      .optional()
+      .isLength({ min: 3 })
+      .withMessage("Title is too short")
+      .trim()
+      .escape(),
+  dateValidator: () =>
+    body("date").optional().isISO8601().withMessage("Invalid date").escape(),
+  durationValidator: () =>
+    body("duration_min")
+      .optional()
+      .isInt()
+      .withMessage("Duration must be an integer")
+      .custom((value) => {
+        if (value < 1) {
+          throw new Error("Duration must be greater than 0");
+        }
+        return true;
+      }),
+  courseIdValidator: () =>
+    body("course_id")
+      .optional()
+      .isInt()
+      .withMessage("Course ID must be an integer")
+      .custom(async (value) => {
+        const course = await courseRepository.getCourseById(value);
+        if (!course) {
+          throw new Error("Course not found");
+        }
+        return true;
+      }),
+};
+
 const passwordValidator = {
   passwordValidator: () =>
     body("password")
@@ -192,6 +283,8 @@ module.exports = {
   courseValidators,
   courseUpdateValidators,
   userUpdateValidators,
+  examValidators,
+  examUpdateValidators,
   passwordValidator,
   commonValidators,
 };
