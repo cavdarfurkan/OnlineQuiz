@@ -17,10 +17,16 @@ const authorize = (roles) => async (req, res, next) => {
     return res.status(401).send({ message: "Unauthorized" });
   }
 
-  const userRoles = await userRepository.getUserRoles(user.id);
-  roles.some((role) => userRoles.includes(role))
-    ? next()
-    : res.status(403).send({ message: "Forbidden" });
+  // const userRoles = await userRepository.getUserRoles(user.id);
+  // roles.some((role) => userRoles.includes(role))
+  //   ? next()
+  //   : res.status(403).send({ message: "Forbidden" });
+
+  if (roles.includes(user.role)) {
+    next();
+  } else {
+    res.status(403).send({ message: "Forbidden" });
+  }
 };
 
 module.exports = {
