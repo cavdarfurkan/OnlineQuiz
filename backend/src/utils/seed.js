@@ -26,6 +26,7 @@ const tables = [
       new User("Jane", "Doe", "janedoe@example.com", defaultPassword),
       new User("Alice", "Smith", "examplee@example.com", defaultPassword),
       new User("Furkan", "Cavdar", "example@example.com", defaultPassword),
+      new User("Admin", "Admin", "admin@admin.com", defaultPassword),
     ],
   },
   {
@@ -44,6 +45,7 @@ const tables = [
       [4, 1],
       [4, 2],
       [4, 3],
+      [5, 3],
     ],
   },
   {

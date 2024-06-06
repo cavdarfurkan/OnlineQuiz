@@ -51,6 +51,11 @@ const createCourse = async (req, res) => {
       .json({ message: "Only admins can provide teacher_id" });
   }
 
+  // Admins have to provide teacher_id
+  if (!data.teacher_id && req.session.user.role === "admin") {
+    return res.status(400).json({ message: "teacher_id is required" });
+  }
+
   const courseId = await courseRepository.createCourse(
     data.short_name,
     data.name,
@@ -120,13 +125,15 @@ const deleteCourse = async (req, res) => {
     }
   }
 
-  const affectedRows = await courseRepository.deleteCourse(id);
-
-  if (!affectedRows) {
-    return res.status(404).json({ message: "Course not found" });
-  }
-
-  return res.status(200).json({ message: "Course deleted" });
+  await courseRepository
+    .deleteCourse(id)
+    .then(() => {
+      return res.status(200).json({ message: "Course deleted" });
+    })
+    .catch((error) => {
+      console.error(error);
+      return res.status(500).json({ message: "Internal server error" });
+    });
 };
 
 module.exports = {

@@ -94,8 +94,35 @@ async function updateCourse(id, clause) {
 
 async function deleteCourse(id) {
   const pool = await getPool();
-  const [result] = await pool.execute("DELETE FROM courses WHERE id = ?", [id]);
-  return result.affectedRows;
+  const connection = await pool.getConnection();
+
+  await connection.beginTransaction();
+
+  try {
+    await connection.execute(
+      "DELETE FROM student_courses WHERE course_id = ?",
+      [id]
+    );
+
+    const courseExams = await connection.execute(
+      "SELECT * FROM exams WHERE course_id = ?",
+      [id]
+    );
+    for (const courseExam of courseExams[0]) {
+      await connection.execute("DELETE FROM student_exams WHERE exam_id = ?", [
+        courseExam.id,
+      ]);
+    }
+    await connection.execute("DELETE FROM exams WHERE course_id = ?", [id]);
+
+    await connection.execute("DELETE FROM courses WHERE id = ?", [id]);
+
+    await connection.commit();
+    return Promise.resolve();
+  } catch (error) {
+    await connection.rollback();
+    return Promise.reject(error);
+  }
 }
 
 async function getCourseByInvitationCode(invitationCode) {

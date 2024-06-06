@@ -123,6 +123,15 @@ const courseUpdateValidators = {
       .escape(),
   startDateValidator: () =>
     body("start_date").optional().isISO8601().withMessage("Invalid date"),
+  archiveValidator: () =>
+    body("is_archived")
+      .optional()
+      .custom((value) => {
+        if (value === "0" || value === "1") {
+          return true;
+        }
+        throw new Error("Invalid value for is_archived, must be 0 or 1");
+      }),
 };
 
 const userUpdateValidators = {
