@@ -97,6 +97,12 @@ const courseValidators = {
         }
         return true;
       }),
+  invitationCodeQueryValidator: () =>
+    query("invitation")
+      .notEmpty()
+      .withMessage("Invitation code is required")
+      .trim()
+      .escape(),
 };
 
 const courseUpdateValidators = {

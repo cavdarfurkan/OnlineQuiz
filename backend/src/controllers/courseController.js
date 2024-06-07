@@ -136,6 +136,49 @@ const deleteCourse = async (req, res) => {
     });
 };
 
+const getStudentsByCourseId = async (req, res) => {
+  const errors = validationResult(req).formatWith(({ msg }) => msg);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  const { id } = matchedData(req);
+  const course = await courseRepository.getCourseById(id);
+  if (!course) {
+    return res.status(404).json({ message: "Course not found" });
+  }
+
+  const students = await courseRepository.getStudentsByCourseId(id);
+  return res.status(200).json(students);
+};
+
+const joinCourse = async (req, res) => {
+  const errors = validationResult(req).formatWith(({ msg }) => msg);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  const user = req.session.user;
+  const { id, invitation } = matchedData(req);
+  const course = await courseRepository.getCourseById(id);
+
+  if (!course) {
+    return res.status(404).json({ message: "Course not found" });
+  }
+
+  if (course.invitation_code !== invitation) {
+    return res.status(400).json({ message: "Invalid invitation code" });
+  }
+
+  const courseStudents = await courseRepository.getStudentsByCourseId(id);
+  if (courseStudents.some((student) => student.id === user.id)) {
+    return res.status(400).json({ message: "User is already in course" });
+  }
+
+  await courseRepository.joinCourse(user.id, course.id);
+  return res.status(200).json({ message: "User joined course" });
+};
+
 module.exports = {
   getCourseById,
   getAllCourses,
@@ -143,4 +186,6 @@ module.exports = {
   createCourse,
   updateCourse,
   deleteCourse,
+  getStudentsByCourseId,
+  joinCourse,
 };

@@ -22,6 +22,25 @@ router.get(
   courseController.getCourseById
 );
 
+router.get(
+  "/:id/students",
+  [
+    authorize(["student", "teacher", "admin"]),
+    commonValidators.idParamValidator(),
+  ],
+  courseController.getStudentsByCourseId
+);
+
+router.get(
+  "/:id/join",
+  [
+    authorize(["student"]),
+    commonValidators.idParamValidator(),
+    courseValidators.invitationCodeQueryValidator(),
+  ],
+  courseController.joinCourse
+);
+
 router.post(
   "/",
   [
@@ -49,12 +68,6 @@ router.patch(
   ],
   courseController.updateCourse
 );
-
-// router.post(
-//   "/:id/join",
-//   [authorize(["student"]), commonValidators.idParamValidator()],
-//   courseController.joinCourse
-// );
 
 router.delete(
   "/:id",

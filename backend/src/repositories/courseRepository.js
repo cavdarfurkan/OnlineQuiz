@@ -134,6 +134,24 @@ async function getCourseByInvitationCode(invitationCode) {
   return rows[0];
 }
 
+async function getStudentsByCourseId(courseId) {
+  const pool = await getPool();
+  const [rows] = await pool.execute(
+    "SELECT * FROM users JOIN student_courses ON users.id = student_courses.student_id WHERE student_courses.course_id = ?",
+    [courseId]
+  );
+  return rows;
+}
+
+async function joinCourse(studentId, courseId) {
+  const pool = await getPool();
+  const [result] = await pool.execute(
+    "INSERT INTO student_courses (student_id, course_id) VALUES (?, ?)",
+    [studentId, courseId]
+  );
+  return result.insertId;
+}
+
 module.exports = {
   getAllCourses,
   getCourseById,
@@ -144,4 +162,6 @@ module.exports = {
   updateCourse,
   deleteCourse,
   getCourseByInvitationCode,
+  getStudentsByCourseId,
+  joinCourse,
 };

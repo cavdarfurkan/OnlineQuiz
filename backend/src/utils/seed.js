@@ -74,6 +74,13 @@ const tables = [
         "2021-09-15",
         1
       ),
+      new Course(
+        "TIN",
+        "Internet Technologies",
+        "A course about internet",
+        "2021-09-15",
+        4
+      ),
     ],
   },
   {
