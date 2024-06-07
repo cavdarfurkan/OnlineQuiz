@@ -2,6 +2,7 @@ const { body, param, query } = require("express-validator");
 const userRepository = require("../repositories/userRepository");
 const courseRepository = require("../repositories/courseRepository");
 const examRepository = require("../repositories/examRepository");
+const questionRepository = require("../repositories/questionRepository");
 
 const authValidators = {
   emailValidator: () =>
@@ -303,6 +304,42 @@ const examStudentValidators = {
       .withMessage("Grade must be a number between 0 and 100"),
 };
 
+const optionValidators = {
+  questionIdQueryValidator: () =>
+    query("questionId")
+      .notEmpty()
+      .withMessage("Question ID is required")
+      .isInt()
+      .withMessage("ID must be an integer"),
+  questionIdValidator: () =>
+    body("question_id")
+      .notEmpty()
+      .withMessage("Question ID is required")
+      .isInt()
+      .withMessage("Question ID must be an integer")
+      .custom(async (value) => {
+        const question = await questionRepository.getQuestionById(value);
+        if (!question) {
+          throw new Error("Question not found");
+        }
+        return true;
+      }),
+  optionTextValidator: () =>
+    body("option_text")
+      .notEmpty()
+      .withMessage("Option text is required")
+      .isLength({ min: 1 })
+      .withMessage("Option text is too short")
+      .trim()
+      .escape(),
+  isCorrectValidator: () =>
+    body("is_correct")
+      .notEmpty()
+      .withMessage("is_correct is required")
+      .isIn(["0", "1"])
+      .withMessage("is_correct must be 0 or 1"),
+};
+
 const passwordValidator = {
   passwordValidator: () =>
     body("password")
@@ -341,6 +378,7 @@ module.exports = {
   examUpdateValidators,
   questionValidators,
   examStudentValidators,
+  optionValidators,
   passwordValidator,
   commonValidators,
 };
