@@ -11,7 +11,7 @@ class Option {
       "option_text VARCHAR(255) NOT NULL",
       "question_id INT NOT NULL",
       "is_correct BOOLEAN NOT NULL",
-      "FOREIGN KEY (question_id) REFERENCES question(id)",
+      "FOREIGN KEY (question_id) REFERENCES question(id) ON DELETE CASCADE",
     ];
   }
 

@@ -1,5 +1,4 @@
 const getPool = require("../utils/db");
-const Exam = require("../models/exam");
 
 async function getAllExamsByCourse(courseId) {
   const pool = await getPool();
@@ -46,22 +45,16 @@ async function updateExam(id, clause) {
 
 async function deleteExam(id) {
   const pool = await getPool();
-  const connection = await pool.getConnection();
+  const [result] = await pool.execute("DELETE FROM exams WHERE id = ?", [id]);
+  return result.affectedRows;
+}
 
-  await connection.beginTransaction();
-  try {
-    await connection.execute("DELETE FROM student_exams WHERE exam_id = ?", [
-      id,
-    ]);
-    await connection.execute("DELETE FROM exams WHERE id = ?", [id]);
-    await connection.commit();
-    return Promise.resolve();
-  } catch (err) {
-    await connection.rollback();
-    return Promise.reject(err);
-  } finally {
-    await connection.release();
-  }
+async function createStudentExam(studentId, examId, grade, startTime, endTime) {
+  const pool = await getPool();
+  await pool.execute(
+    "INSERT INTO student_exams (student_id, exam_id, grade, start_time, end_time) VALUES (?, ?, ?, ?, ?)",
+    [studentId, examId, grade, startTime, endTime]
+  );
 }
 
 module.exports = {
@@ -71,4 +64,5 @@ module.exports = {
   createExam,
   updateExam,
   deleteExam,
+  createStudentExam,
 };

@@ -124,7 +124,7 @@ const tables = [
       "start_time TIMESTAMP NOT NULL",
       "end_time TIMESTAMP NOT NULL",
       "FOREIGN KEY (student_id) REFERENCES users(id)",
-      "FOREIGN KEY (exam_id) REFERENCES exams(id)",
+      "FOREIGN KEY (exam_id) REFERENCES exams(id) ON DELETE CASCADE",
     ],
     keys: ["student_id", "exam_id", "grade", "start_time", "end_time"],
     data: [
@@ -178,8 +178,8 @@ const tables = [
       "question_id INT NOT NULL",
       "answered_option_id INT NOT NULL",
       "FOREIGN KEY (student_id) REFERENCES users(id)",
-      "FOREIGN KEY (question_id) REFERENCES question(id)",
-      "FOREIGN KEY (answered_option_id) REFERENCES options(id)",
+      "FOREIGN KEY (question_id) REFERENCES question(id) ON DELETE CASCADE",
+      "FOREIGN KEY (answered_option_id) REFERENCES options(id) ON DELETE CASCADE",
     ],
     keys: ["student_id", "question_id", "answered_option_id"],
     data: [

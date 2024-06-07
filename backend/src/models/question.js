@@ -9,7 +9,7 @@ class Question {
       "id INT AUTO_INCREMENT PRIMARY KEY",
       "question_text VARCHAR(255) NOT NULL",
       "exam_id INT NOT NULL",
-      "FOREIGN KEY (exam_id) REFERENCES exams(id)",
+      "FOREIGN KEY (exam_id) REFERENCES exams(id) ON DELETE CASCADE",
     ];
   }
 
