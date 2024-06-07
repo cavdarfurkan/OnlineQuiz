@@ -52,6 +52,24 @@ async function deleteQuestion(id) {
   return results.affectedRows;
 }
 
+async function createStudentAnswer(studentId, questionId, answeredOptionId) {
+  const pool = await getPool();
+  const [result] = await pool.execute(
+    "INSERT INTO student_answers (student_id, question_id, answered_option_id) VALUES (?, ?, ?)",
+    [studentId, questionId, answeredOptionId]
+  );
+  return result.insertId;
+}
+
+async function getStudentAnswer(studentId, questionId) {
+  const pool = await getPool();
+  const [rows] = await pool.execute(
+    "SELECT * FROM student_answers WHERE student_id = ? AND question_id = ?",
+    [studentId, questionId]
+  );
+  return rows[0];
+}
+
 module.exports = {
   getAllQuestionsByExam,
   getAllQuestions,
@@ -59,4 +77,6 @@ module.exports = {
   createQuestion,
   updateQuestion,
   deleteQuestion,
+  createStudentAnswer,
+  getStudentAnswer,
 };

@@ -162,10 +162,58 @@ const deleteQuestion = async (req, res) => {
   }
 };
 
+const answerQuestion = async (req, res) => {
+  const errors = validationResult(req).formatWith(({ msg }) => msg);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  const { id, answered_option_id } = matchedData(req);
+
+  const question = await questionRepository.getQuestionById(id);
+  if (!question) {
+    return res.status(404).json({ message: "Question not found" });
+  }
+
+  // Check if the question is part of an exam that the student is taking
+  const exam = await examRepository.getExamById(question.exam_id);
+  const course = await courseRepository.getCourseById(exam.course_id);
+  const studentCourses = await courseRepository.getAllCoursesByStudentId(
+    req.session.user.id
+  );
+  if (!studentCourses.map((course) => course.id).includes(course.id)) {
+    return res.status(403).json({
+      message: "Unauthorized to answer question for this exam",
+    });
+  }
+
+  // Check if the student has already answered the question
+  const studentAnswer = await questionRepository.getStudentAnswer(
+    req.session.user.id,
+    id
+  );
+  if (studentAnswer) {
+    return res.status(400).json({ message: "Question already answered" });
+  }
+
+  try {
+    await questionRepository.createStudentAnswer(
+      req.session.user.id,
+      id,
+      answered_option_id
+    );
+    return res.status(201).json({ message: "Answer submitted" });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Error submitting answer" });
+  }
+};
+
 module.exports = {
   getAllQuestions,
   getQuestionById,
   createQuestion,
   updateQuestion,
   deleteQuestion,
+  answerQuestion,
 };

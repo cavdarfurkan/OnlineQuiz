@@ -3,6 +3,7 @@ const userRepository = require("../repositories/userRepository");
 const courseRepository = require("../repositories/courseRepository");
 const examRepository = require("../repositories/examRepository");
 const questionRepository = require("../repositories/questionRepository");
+const optionRepository = require("../repositories/optionRepository");
 
 const authValidators = {
   emailValidator: () =>
@@ -321,6 +322,25 @@ const optionValidators = {
         const question = await questionRepository.getQuestionById(value);
         if (!question) {
           throw new Error("Question not found");
+        }
+        return true;
+      }),
+  answeredOptionIdValidator: () =>
+    body("answered_option_id")
+      .notEmpty()
+      .withMessage("Answered option ID is required")
+      .isInt()
+      .withMessage("Answered option ID must be an integer")
+      .custom(async (value, { req }) => {
+        const question = await questionRepository.getQuestionById(
+          req.params.id
+        );
+        const options = await optionRepository.getAllOptionsByQuestionId(
+          question.id
+        );
+        const optionIds = options.map((option) => option.id.toString());
+        if (!optionIds.includes(value)) {
+          throw new Error("Option not found for this question");
         }
         return true;
       }),

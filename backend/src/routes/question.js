@@ -4,7 +4,7 @@ const { authorize } = require("../middleware/authMiddlewares");
 const {
   commonValidators,
   questionValidators,
-  questionUpdateValidators,
+  optionValidators,
 } = require("../utils/validators");
 
 router.get(
@@ -33,6 +33,16 @@ router.post(
     questionValidators.questionTextValidator(),
   ],
   questionController.createQuestion
+);
+
+router.post(
+  "/:id/answer",
+  [
+    authorize(["student"]),
+    commonValidators.idParamValidator(),
+    optionValidators.answeredOptionIdValidator(),
+  ],
+  questionController.answerQuestion
 );
 
 router.patch(
