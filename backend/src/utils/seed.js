@@ -6,6 +6,7 @@ const Student = require("../models/student");
 const User = require("../models/user");
 const Exam = require("../models/exam");
 const Question = require("../models/question");
+const Option = require("../models/option");
 const Role = require("../models/role");
 
 const defaultPassword = bcrypt.hashSync("password", 10);
@@ -119,17 +120,79 @@ const tables = [
     fields: [
       "student_id INT NOT NULL",
       "exam_id INT NOT NULL",
-      "grade INT",
+      "grade INT NOT NULL",
+      "start_time TIMESTAMP NOT NULL",
+      "end_time TIMESTAMP NOT NULL",
       "FOREIGN KEY (student_id) REFERENCES users(id)",
       "FOREIGN KEY (exam_id) REFERENCES exams(id)",
     ],
-    keys: ["student_id", "exam_id", "grade"],
+    keys: ["student_id", "exam_id", "grade", "start_time", "end_time"],
     data: [
-      [2, 1, null],
-      [2, 2, 90],
-      [3, 1, 85],
-      [3, 2, 95],
-      [3, 3, 45],
+      [2, 1, 70, "2021-10-15 10:00:00", "2021-10-15 11:30:00"],
+      [3, 1, 75, "2021-10-15 10:00:00", "2021-10-15 11:30:00"],
+    ],
+  },
+  {
+    name: "question",
+    fields: Question.fields,
+    keys: Question.keys,
+    data: [
+      new Question("What is the capital of Turkey?", 1),
+      new Question("What is the capital of France?", 1),
+      new Question("What is the capital of Germany?", 1),
+      new Question("What is the capital of Poland?", 1),
+      new Question("What is the capital of Spain?", 1),
+    ],
+  },
+  {
+    name: "options",
+    fields: Option.fields,
+    keys: Option.keys,
+    data: [
+      new Option("Ankara", 1, true),
+      new Option("Istanbul", 1, false),
+      new Option("Izmir", 1, false),
+      new Option("Antalya", 1, false),
+      new Option("Paris", 2, true),
+      new Option("Lyon", 2, false),
+      new Option("Marseille", 2, false),
+      new Option("Nice", 2, false),
+      new Option("Berlin", 3, true),
+      new Option("Hamburg", 3, false),
+      new Option("Munich", 3, false),
+      new Option("Cologne", 3, false),
+      new Option("Warsaw", 4, true),
+      new Option("Krakow", 4, false),
+      new Option("Wroclaw", 4, false),
+      new Option("Poznan", 4, false),
+      new Option("Madrid", 5, true),
+      new Option("Barcelona", 5, false),
+      new Option("Valencia", 5, false),
+      new Option("Seville", 5, false),
+    ],
+  },
+  {
+    name: "student_answers",
+    fields: [
+      "student_id INT NOT NULL",
+      "question_id INT NOT NULL",
+      "answered_option_id INT NOT NULL",
+      "FOREIGN KEY (student_id) REFERENCES users(id)",
+      "FOREIGN KEY (question_id) REFERENCES question(id)",
+      "FOREIGN KEY (answered_option_id) REFERENCES options(id)",
+    ],
+    keys: ["student_id", "question_id", "answered_option_id"],
+    data: [
+      [2, 1, 1],
+      [2, 2, 5],
+      [2, 3, 9],
+      [2, 4, 13],
+      [2, 5, 17],
+      [3, 1, 2],
+      [3, 2, 6],
+      [3, 3, 10],
+      [3, 4, 14],
+      [3, 5, 18],
     ],
   },
 ];

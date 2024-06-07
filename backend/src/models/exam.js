@@ -5,11 +5,6 @@ class Exam {
     this.duration_min = duration_min;
     this.pass_percent = pass_percent;
     this.course_id = course_id;
-    // this._questions = [];
-  }
-
-  addQuestion(question) {
-    this._questions.push(question);
   }
 
   static get fields() {
