@@ -1,6 +1,7 @@
 const { body, param, query } = require("express-validator");
 const userRepository = require("../repositories/userRepository");
 const courseRepository = require("../repositories/courseRepository");
+const examRepository = require("../repositories/examRepository");
 
 const authValidators = {
   emailValidator: () =>
@@ -255,6 +256,53 @@ const examUpdateValidators = {
       }),
 };
 
+const questionValidators = {
+  examIdQueryValidator: () =>
+    query("examId").isInt().withMessage("ID must be an integer"),
+  examIdValidator: () =>
+    body("exam_id")
+      .notEmpty()
+      .withMessage("Exam ID is required")
+      .isInt()
+      .withMessage("Exam ID must be an integer")
+      .custom(async (value) => {
+        const exam = await examRepository.getExamById(value);
+        if (!exam) {
+          throw new Error("Exam not found");
+        }
+        return true;
+      }),
+  questionTextValidator: () =>
+    body("question_text")
+      .notEmpty()
+      .withMessage("Question text is required")
+      .isLength({ min: 5 })
+      .withMessage("Question text is too short")
+      .trim()
+      .escape(),
+};
+
+const examStudentValidators = {
+  startTimeValidator: () =>
+    body("start_time")
+      .notEmpty()
+      .withMessage("Start time is required")
+      .isISO8601()
+      .withMessage("Invalid start time format"),
+  endTimeValidator: () =>
+    body("end_time")
+      .notEmpty()
+      .withMessage("End time is required")
+      .isISO8601()
+      .withMessage("Invalid end time format"),
+  gradeValidator: () =>
+    body("grade")
+      .notEmpty()
+      .withMessage("Grade is required")
+      .isFloat({ min: 0, max: 100 })
+      .withMessage("Grade must be a number between 0 and 100"),
+};
+
 const passwordValidator = {
   passwordValidator: () =>
     body("password")
@@ -291,6 +339,8 @@ module.exports = {
   userUpdateValidators,
   examValidators,
   examUpdateValidators,
+  questionValidators,
+  examStudentValidators,
   passwordValidator,
   commonValidators,
 };

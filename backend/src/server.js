@@ -8,6 +8,7 @@ const authRouter = require("./routes/auth");
 const courseRouter = require("./routes/course");
 const userRouter = require("./routes/user");
 const examRouter = require("./routes/exam");
+const questionRouter = require("./routes/question");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -22,6 +23,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/courses", courseRouter);
 app.use("/api/users", userRouter);
 app.use("/api/exams", examRouter);
+app.use("/api/questions", questionRouter);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
