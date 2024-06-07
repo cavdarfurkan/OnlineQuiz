@@ -5,6 +5,7 @@ const {
   commonValidators,
   examValidators,
   examUpdateValidators,
+  examStudentValidators,
 } = require("../utils/validators");
 
 router.get(
@@ -36,6 +37,18 @@ router.post(
     examValidators.courseIdValidator(),
   ],
   examController.createExam
+);
+
+router.post(
+  "/student-exams/:id",
+  [
+    authorize(["student"]),
+    commonValidators.idParamValidator(),
+    examStudentValidators.startTimeValidator(),
+    examStudentValidators.endTimeValidator(),
+    examStudentValidators.gradeValidator(),
+  ],
+  examController.createStudentExam
 );
 
 router.patch(

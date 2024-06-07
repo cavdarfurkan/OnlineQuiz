@@ -155,10 +155,29 @@ const deleteExam = async (req, res) => {
     });
 };
 
+const createStudentExam = async (req, res) => {
+  const errors = validationResult(req).formatWith(({ msg }) => msg);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  const { id, start_time, end_time, grade } = matchedData(req);
+  await examRepository.createStudentExam(
+    req.session.user.id,
+    id,
+    grade,
+    start_time,
+    end_time
+  );
+
+  res.status(201).json({ message: "Exam submitted" });
+};
+
 module.exports = {
   getAllExams,
   getExamById,
   createExam,
   updateExam,
   deleteExam,
+  createStudentExam,
 };
