@@ -1,0 +1,21 @@
+.bm-burger-button {
+  display: none;
+}
+
+.bm-cross-button {
+  display: none;
+}
+
+.bm-menu {
+  background-color: var(--bs-light);
+  padding: 0 1em 0;
+  font-size: 1.15em;
+}
+
+.bm-item-list {
+  padding: 0.8em;
+}
+
+.bm-item {
+  display: inline-block;
+}
