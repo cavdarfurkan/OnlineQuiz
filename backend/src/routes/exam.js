@@ -26,6 +26,12 @@ router.get(
   examController.getExamById
 );
 
+router.get(
+  "/student-exams/:id",
+  [authorize(["student", "teacher", "admin"]), commonValidators.idParamValidator()],
+  examController.getStudentExamsByStudentId
+);
+
 router.post(
   "/",
   [

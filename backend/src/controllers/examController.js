@@ -1,6 +1,7 @@
 const examRepository = require("../repositories/examRepository");
 const courseRepository = require("../repositories/courseRepository");
 const { validationResult, matchedData } = require("express-validator");
+const e = require("express");
 
 const getAllExams = async (req, res) => {
   const errors = validationResult(req).formatWith(({ msg }) => msg);
@@ -31,6 +32,50 @@ const getExamById = async (req, res) => {
     return res.status(404).json({ message: "Exam not found" });
   }
   res.json(exam);
+};
+
+const getStudentExamsByStudentId = async (req, res) => {
+  const errors = validationResult(req).formatWith(({ msg }) => msg);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  const { id } = matchedData(req);
+
+  // Admins can get exams for any student
+  if (req.session.user.role === "admin") {
+    const studentExams = await examRepository.getStudentExamsByStudentId(id);
+    return res.json(studentExams);
+  }
+
+  // Teachers can get exams for their students
+  if (req.session.user.role === "teacher") {
+    const teacherCourses = await courseRepository.getAllCoursesByTeacherId(
+      req.session.user.id
+    );
+
+    const studentExams = await examRepository.getStudentExamsByStudentId(id);
+    let exams = [];
+    for (const studentExam of studentExams) {
+      const exam = await examRepository.getExamById(studentExam.exam_id);
+      const course = await courseRepository.getCourseById(exam.course_id);
+      if (course.teacher_id === req.session.user.id) {
+        exams.push(studentExam);
+      }
+    }
+
+    return res.json(exams);
+  }
+
+  // Students can get only their exams
+  if (req.session.user.id != id) {
+    return res
+      .status(403)
+      .json({ message: "Unauthorized, can only get own exams" });
+  }
+
+  const studentExams = await examRepository.getStudentExamsByStudentId(id);
+  res.json(studentExams);
 };
 
 const createExam = async (req, res) => {
@@ -176,6 +221,7 @@ const createStudentExam = async (req, res) => {
 module.exports = {
   getAllExams,
   getExamById,
+  getStudentExamsByStudentId,
   createExam,
   updateExam,
   deleteExam,

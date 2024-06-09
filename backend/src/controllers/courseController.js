@@ -36,6 +36,15 @@ const getAllCoursesByUser = async (req, res) => {
   return res.status(403).json({ message: "Unauthorized" });
 };
 
+const getUpcomingCourses = async (req, res) => {
+  const today = new Date().toISOString().split("T")[0].toString();
+  const courses = await courseRepository.getUpcomingCourses(
+    req.session.user.id,
+    today
+  );
+  return res.status(200).json(courses);
+};
+
 const createCourse = async (req, res) => {
   const errors = validationResult(req).formatWith(({ msg }) => msg);
   if (!errors.isEmpty()) {
@@ -183,6 +192,7 @@ module.exports = {
   getCourseById,
   getAllCourses,
   getAllCoursesByUser,
+  getUpcomingCourses,
   createCourse,
   updateCourse,
   deleteCourse,

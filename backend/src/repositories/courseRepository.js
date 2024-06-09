@@ -40,6 +40,18 @@ async function getAllCoursesByStudentId(studentId) {
   return rows;
 }
 
+async function getUpcomingCourses(studentId, today) {
+  console.log(studentId, today);
+  const pool = await getPool();
+
+  const [rows] = await pool.execute(
+    `SELECT * FROM courses WHERE start_date > ? AND id NOT IN (SELECT course_id FROM student_courses WHERE student_id = ?)`,
+    [today, studentId]
+  );
+
+  return rows;
+}
+
 async function createCourse(
   short_name,
   name,
@@ -158,6 +170,7 @@ module.exports = {
   getCourseByShortName,
   getAllCoursesByTeacherId,
   getAllCoursesByStudentId,
+  getUpcomingCourses,
   createCourse,
   updateCourse,
   deleteCourse,

@@ -14,6 +14,12 @@ router.get(
 );
 
 router.get(
+  "/upcoming",
+  authorize(["student"]),
+  courseController.getUpcomingCourses
+);
+
+router.get(
   "/:id",
   [
     authorize(["student", "teacher", "admin"]),

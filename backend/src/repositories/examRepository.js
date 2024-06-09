@@ -20,6 +20,15 @@ async function getExamById(id) {
   return rows[0];
 }
 
+async function getStudentExamsByStudentId(studentId) {
+  const pool = await getPool();
+  const [rows] = await pool.execute(
+    "SELECT * FROM student_exams WHERE student_id = ?",
+    [studentId]
+  );
+  return rows;
+}
+
 async function createExam(exam) {
   const pool = await getPool();
 
@@ -60,6 +69,7 @@ async function createStudentExam(studentId, examId, grade, startTime, endTime) {
 module.exports = {
   getAllExamsByCourse,
   getAllExams,
+  getStudentExamsByStudentId,
   getExamById,
   createExam,
   updateExam,
