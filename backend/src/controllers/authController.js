@@ -52,7 +52,7 @@ const signup = async (req, res) => {
 
   await userRepository.getUserByEmail(req.body.email).then(async (user) => {
     if (user) {
-      return res.status(409).send("That email is already taken");
+      return res.status(409).json({ message: "That email is already taken" });
     }
 
     const userPassword = bcrypt.hashSync(req.body.password, 10);
@@ -66,11 +66,11 @@ const signup = async (req, res) => {
         req.body.role
       )
       .then(() => {
-        return res.status(201).send("Signed up successfully");
+        return res.status(201).json({ message: "Signed up successfully" });
       })
       .catch((err) => {
         console.error(err);
-        return res.status(500).send(err || "An error occurred");
+        return res.status(500).json({ message: err || "An error occurred" });
       });
   });
 };

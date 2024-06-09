@@ -2,7 +2,9 @@ require("dotenv").config();
 
 const session = {
   secret: process.env.SESSION_SECRET || "secret",
-  cookie: { maxAge: 60000 },
+  // cookie: {
+  //   httpOnly: false,
+  // },
   resave: false,
   saveUninitialized: true,
 };

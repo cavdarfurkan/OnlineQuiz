@@ -2,7 +2,7 @@ const bcrypt = require("bcrypt");
 const userRepository = require("../repositories/userRepository");
 
 const authenticate = async (req, res, next) => {
-  const allowedRoutes = ["/api/auth/login", "/api/auth/signup"];
+  const allowedRoutes = ["/api/auth/login", "/api/auth/signup", "/"];
 
   if (allowedRoutes.includes(req.path)) return next();
 
