@@ -175,36 +175,3 @@ export const studentCoursesSlice = createSlice({
 });
 
 ///////////////////////////
-
-export const joinCourse = createAsyncThunk(
-  "exams/joinCourse",
-  async ({ courseId, invitationQueryParam }, { dispatch }) => {
-    const response = await dispatch(
-      api.endpoints.joinCourse.initiate({ courseId, invitationQueryParam })
-    ).unwrap();
-
-    console.log(response);
-  }
-);
-
-export const studentJoinCoursesSlice = createSlice({
-  name: "studentJoinCoursesSlice",
-  initialState: {
-    loading: false,
-    error: null,
-  },
-  reducers: {},
-  extraReducers: (builder) => {
-    builder
-      .addCase(joinCourse.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(joinCourse.fulfilled, (state) => {
-        state.loading = false;
-      })
-      .addCase(joinCourse.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error;
-      });
-  },
-});

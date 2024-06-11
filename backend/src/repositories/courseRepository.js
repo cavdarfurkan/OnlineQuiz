@@ -41,11 +41,10 @@ async function getAllCoursesByStudentId(studentId) {
 }
 
 async function getUpcomingCourses(studentId, today) {
-  console.log(studentId, today);
   const pool = await getPool();
 
   const [rows] = await pool.execute(
-    `SELECT * FROM courses WHERE start_date > ? AND id NOT IN (SELECT course_id FROM student_courses WHERE student_id = ?)`,
+    `SELECT * FROM courses WHERE start_date > ? AND id NOT IN (SELECT course_id FROM student_courses WHERE student_id = ?) ORDER BY start_date ASC`,
     [today, studentId]
   );
 

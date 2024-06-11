@@ -5,7 +5,6 @@ import { sidebarSlice } from "../components/sidebar/sidebarSlice";
 import {
   studentDashboardSlice,
   studentCoursesSlice,
-  studentJoinCoursesSlice,
 } from "./features/student/studentSlice";
 
 import "./api/auth";
@@ -19,7 +18,6 @@ export const store = configureStore({
     sidebar: sidebarSlice.reducer,
     studentDashboardSlice: studentDashboardSlice.reducer,
     studentCoursesSlice: studentCoursesSlice.reducer,
-    studentJoinCoursesSlice: studentJoinCoursesSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(api.middleware),

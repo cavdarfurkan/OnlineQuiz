@@ -168,18 +168,16 @@ const joinCourse = async (req, res) => {
   }
 
   const user = req.session.user;
-  const { id, invitation } = matchedData(req);
-  const course = await courseRepository.getCourseById(id);
+  const { invitation } = matchedData(req);
+  const course = await courseRepository.getCourseByInvitationCode(invitation);
 
   if (!course) {
     return res.status(404).json({ message: "Course not found" });
   }
 
-  if (course.invitation_code !== invitation) {
-    return res.status(400).json({ message: "Invalid invitation code" });
-  }
-
-  const courseStudents = await courseRepository.getStudentsByCourseId(id);
+  const courseStudents = await courseRepository.getStudentsByCourseId(
+    course.id
+  );
   if (courseStudents.some((student) => student.id === user.id)) {
     return res.status(400).json({ message: "User is already in course" });
   }

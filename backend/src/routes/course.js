@@ -20,6 +20,15 @@ router.get(
 );
 
 router.get(
+  "/join",
+  [
+    authorize(["student"]),
+    courseValidators.invitationCodeQueryValidator(),
+  ],
+  courseController.joinCourse
+);
+
+router.get(
   "/:id",
   [
     authorize(["student", "teacher", "admin"]),
@@ -35,16 +44,6 @@ router.get(
     commonValidators.idParamValidator(),
   ],
   courseController.getStudentsByCourseId
-);
-
-router.get(
-  "/:id/join",
-  [
-    authorize(["student"]),
-    commonValidators.idParamValidator(),
-    courseValidators.invitationCodeQueryValidator(),
-  ],
-  courseController.joinCourse
 );
 
 router.post(

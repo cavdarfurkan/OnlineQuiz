@@ -11,20 +11,22 @@ export const courseApi = api.injectEndpoints({
     getCourseById: builder.query({
       query: (courseId) => `courses/${courseId}`,
     }),
-    joinCourse: builder.query({
-      query: ({ courseId, invitationQueryParam }) => ({
-        url: `courses/${courseId}/join`,
+    joinCourse: builder.mutation({
+      query: ({ invitationQueryParam }) => ({
+        url: "courses/join",
         method: "GET",
         params: {
           invitation: invitationQueryParam,
-        },
+        },  
       }),
+      invalidatesTags: ["UpcomingCourses"],
     }),
     getUpcomingCourses: builder.query({
       query: () => ({
         url: "courses/upcoming",
         method: "GET",
       }),
+      providesTags: ["UpcomingCourses"],
       transformResponse: (response) => {
         return response.map((course) => {
           const { start_date, ...data } = course;
@@ -46,5 +48,6 @@ export const courseApi = api.injectEndpoints({
 export const {
   useGetCoursesByUserQuery,
   useGetCourseByIdQuery,
+  useJoinCourseMutation,
   useGetUpcomingCoursesQuery,
 } = courseApi;

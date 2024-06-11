@@ -1,58 +1,80 @@
 import * as Yup from "yup";
-import { useDispatch, useSelector } from "react-redux";
-import { joinCourse } from "../app/features/student/studentSlice";
 import Loading from "../components/Loading";
-import { useEffect } from "react";
-import { useGetUpcomingCoursesQuery } from "../app/api/course";
-import Card from "../components/card/Card";
 import {
-  CardItemOne,
-  CardItemThree,
-  CardItemTwo,
-} from "../components/card/CardItems";
+  useGetUpcomingCoursesQuery,
+  useJoinCourseMutation,
+} from "../app/api/course";
+import Card from "../components/card/Card";
+import { CardItemOne } from "../components/card/CardItems";
+import { Field, Formik, Form, ErrorMessage } from "formik";
+import { FaEnvelope } from "react-icons/fa6";
 
 const joinCourseSchema = Yup.object().shape({
-  courseCode: Yup.number().required("Required"),
-  invitation: Yup.string().required("Required"),
+  courseInvitation: Yup.string().required("Required").trim(),
 });
 
 const JoinCoursePage = () => {
-  const dispatch = useDispatch();
-  const { loading, error } = useSelector(
-    (state) => state.studentJoinCoursesSlice
-  );
-
+  const [joinCourse, { error }] = useJoinCourseMutation();
   const {
     data: upcomingCourses,
     isError,
     isLoading,
   } = useGetUpcomingCoursesQuery();
 
-  console.log(upcomingCourses);
-
-  const handleJoinCourse = () => {
-    // const courseCode = document.getElementById("courseCode").value;
-    dispatch(joinCourse({ courseId: 4, invitation: "wiqx47" }));
+  const handleJoinCourse = async (values) => {
+    try {
+      const { courseInvitation } = values;
+      await joinCourse({
+        invitationQueryParam: courseInvitation.trim(),
+      }).unwrap();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  if (loading) {
-    return <Loading />;
-  }
-
-  if (error) {
-    return <div>Error fetching data: {error.message}</div>;
-  }
-
   return (
-    <div>
-      <h4>Join Course</h4>
-      <hr />
-      <div className="row">
-        <div className="col-md-6">
-          <div className="form-group mb-3">
-            <label htmlFor="courseCode">Course Code</label>
-            <input type="text" className="form-control" id="courseCode" />
-          </div>
+    <>
+      <div>
+        <h4>Join Course</h4>
+        <hr />
+      </div>
+      <div className="col-12">
+        <div className="mb-3">
+          <Formik
+            initialValues={{ courseInvitation: "" }}
+            validationSchema={joinCourseSchema}
+            onSubmit={async (values) => await handleJoinCourse(values)}
+          >
+            <Form>
+              <div className="w100 d-flex gap-2">
+                <Field
+                  type="text"
+                  id="courseInvitation"
+                  name="courseInvitation"
+                  placeholder="Invitation Code"
+                  className="form-control"
+                />
+                <button
+                  className="btn btn-primary d-flex align-items-center"
+                  type="submit"
+                >
+                  <FaEnvelope />
+                </button>
+              </div>
+              <ErrorMessage
+                name="courseInvitation"
+                component="div"
+                className="ms-1 text-danger text-start form-text"
+              />
+              {error && (
+                <div className="ms-1 text-danger text-start form-text">
+                  {error.data.message}
+                </div>
+              )}
+            </Form>
+          </Formik>
+        </div>
+        <div>
           {isLoading ? (
             <Loading />
           ) : isError ? (
@@ -60,20 +82,19 @@ const JoinCoursePage = () => {
           ) : (
             <Card>
               {upcomingCourses.map((course, index) => (
-                <CardItemTwo
+                <CardItemOne
                   key={index}
-                  title={course.name}
-                  description={course.start_date}
+                  title={course.short_name}
+                  description={course.name}
+                  text={course.start_date}
+                  buttonLink={`/courses/${course.id}`}
                 />
               ))}
             </Card>
           )}
-          <button className="btn btn-primary" onClick={handleJoinCourse}>
-            Join Course
-          </button>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 export default JoinCoursePage;
