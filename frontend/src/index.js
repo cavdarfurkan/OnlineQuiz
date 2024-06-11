@@ -14,6 +14,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import CoursesList from "./pages/CoursesList";
 import JoinCoursePage from "./pages/JoinCoursePage";
 import CourseDetailsPage from "./pages/CourseDetailsPage";
+import CourseExams from "./pages/CourseExams";
 
 const router = createBrowserRouter([
   {
@@ -50,6 +51,10 @@ const router = createBrowserRouter([
           {
             path: "courses/:id",
             element: <CourseDetailsPage />,
+          },
+          {
+            path: "courses/:id/exams",
+            element: <CourseExams />,
           },
           {
             path: "courses/:id/edit",

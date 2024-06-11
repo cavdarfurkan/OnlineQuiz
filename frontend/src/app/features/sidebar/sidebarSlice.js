@@ -35,7 +35,7 @@ const initialState = {
       visible: false,
       title: "Exams",
       // icon: "",
-      path: "/exams",
+      path: "courses/:courseId/exams",
     },
   ],
   expandedSections: {},
@@ -70,6 +70,18 @@ export const sidebarSlice = createSlice({
         return item;
       });
     },
+    updateMenuItemPath: (state, action) => {
+      const { index, path } = action.payload;
+      state.menuItems = state.menuItems.map((item) => {
+        if (item.index === index) {
+          return {
+            ...item,
+            path,
+          };
+        }
+        return item;
+      });
+    },
     resetMenuItems: (state) => {
       state.menuItems = initialState.menuItems;
     },
@@ -82,6 +94,7 @@ export const {
   closeSidebar,
   toggleSection,
   changeMenuItemVisibility,
+  updateMenuItemPath,
   resetMenuItems,
 } = sidebarSlice.actions;
 export default sidebarSlice.reducer;

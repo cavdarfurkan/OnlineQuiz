@@ -10,7 +10,10 @@ import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import { FaEnvelope } from "react-icons/fa6";
 import { useDispatch } from "react-redux";
-import { changeMenuItemVisibility } from "../app/features/sidebar/sidebarSlice";
+import {
+  changeMenuItemVisibility,
+  updateMenuItemPath,
+} from "../app/features/sidebar/sidebarSlice";
 
 const CourseDetailsPage = () => {
   const [isStudentJoined, setIsStudentJoined] = useState(false);
@@ -34,13 +37,19 @@ const CourseDetailsPage = () => {
   useEffect(() => {
     if (isStudentJoined) {
       dispatch(
+        updateMenuItemPath({
+          index: 4,
+          path: `/courses/${id}/exams`,
+        })
+      );
+      dispatch(
         changeMenuItemVisibility({
           index: 4,
           show: true,
         })
       );
     }
-  }, [dispatch, isStudentJoined]);
+  }, [dispatch, id, isStudentJoined]);
 
   const [joinCourse, { error: joinError }] = useJoinCourseMutation();
   const handleJoinCourse = async () => {

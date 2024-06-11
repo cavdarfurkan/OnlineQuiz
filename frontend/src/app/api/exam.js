@@ -10,6 +10,20 @@ export const examApi = api.injectEndpoints({
           courseId: courseIdParam,
         },
       }),
+      transformResponse: (response) => {
+        return response.map((exam) => {
+          const { date, ...data } = exam;
+          return {
+            ...data,
+            date: new Date(date)
+              .toISOString()
+              .split("T")
+              .join(" ")
+              .split(".")[0]
+              .replace("T", " "),
+          };
+        });
+      },
     }),
     getStudentExams: builder.query({
       query: (studentId) => `exams/student-exams/${studentId}`,
