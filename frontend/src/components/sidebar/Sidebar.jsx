@@ -79,7 +79,7 @@ const Sidebar = () => {
                       <FaChevronDown className="ms-auto" />
                     )}
                   </div>
-                  <div class="collapse" id={"collapse" + index}>
+                  <div className="collapse" id={"collapse" + index}>
                     {item.children.map((child, index) => (
                       <Link
                         to={child.path}

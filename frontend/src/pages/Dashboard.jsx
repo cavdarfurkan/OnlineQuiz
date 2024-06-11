@@ -16,10 +16,6 @@ const Dashboard = () => {
     dispatch(getStudentDashboardData());
   }, [dispatch]);
 
-  if (loading) {
-    return <Loading />;
-  }
-
   if (error) {
     return <div>Error fetching data: {error.message}</div>;
   }
@@ -33,27 +29,35 @@ const Dashboard = () => {
       <div className="row justify-content-between gy-3">
         <div className="col-md-7 col-12">
           <Card title="Scheduled Exams">
-            {scheduledExams.map((exam, index) => (
-              <CardItemOne
-                key={index}
-                title={exam.course_short_name}
-                description={exam.exam_title}
-                text={exam.exam_date}
-                buttonLink={`/courses/${exam.exam.course_id}/exams/${exam.exam.id}`}
-              />
-            ))}
+            {loading ? (
+              <Loading />
+            ) : (
+              scheduledExams.map((exam, index) => (
+                <CardItemOne
+                  key={index}
+                  title={exam.course_short_name}
+                  description={exam.exam_title}
+                  text={exam.exam_date}
+                  buttonLink={`/courses/${exam.exam.course_id}/exams/${exam.exam.id}`}
+                />
+              ))
+            )}
           </Card>
         </div>
         <div className="col-md-5 col-12">
           <Card title="Grades">
-            {grades.map((grade, index) => (
-              <CardItemTwo
-                key={index}
-                title={grade.course_short_name}
-                description={grade.exam_title}
-                text={grade.grade}
-              />
-            ))}
+            {loading ? (
+              <Loading />
+            ) : (
+              grades.map((grade, index) => (
+                <CardItemTwo
+                  key={index}
+                  title={grade.course_short_name}
+                  description={grade.exam_title}
+                  text={grade.grade}
+                />
+              ))
+            )}
           </Card>
         </div>
       </div>

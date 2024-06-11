@@ -13,8 +13,8 @@ export const CardItemOne = ({ title, description, text, buttonLink = "" }) => {
           </div>
         </div>
         {buttonLink && (
-          <div className="col-sm-4 col-6 text-end pe-5">
-            <Link to={buttonLink} class="btn btn-primary">
+          <div className="col-sm-4 col-6 text-end pe-5 w-auto">
+            <Link to={buttonLink} className="btn btn-primary d-flex">
               <FaChevronRight />
             </Link>
           </div>
@@ -55,7 +55,7 @@ export const CardItemThree = ({ text, buttonLink = "" }) => {
         </div>
         {buttonLink && (
           <div className="col-sm-4 col-6 text-end pe-5">
-            <Link to={buttonLink} class="btn btn-primary">
+            <Link to={buttonLink} className="btn btn-primary">
               <FaChevronRight />
             </Link>
           </div>

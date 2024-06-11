@@ -15,10 +15,6 @@ const CoursesList = () => {
     dispatch(getStudentCourses());
   }, [dispatch]);
 
-  if (loading) {
-    return <Loading />;
-  }
-
   if (error) {
     return <div>Error fetching data: {error.message}</div>;
   }
@@ -32,26 +28,34 @@ const CoursesList = () => {
       <div className="row justify-content-between gy-3">
         <div className="col-md-7 col-12">
           <Card title="Courses">
-            {courses.map((course, index) => (
-              <CardItemThree
-                key={index}
-                text={course.name}
-                buttonLink={`/courses/${course.id}`}
-              />
-            ))}
+            {loading ? (
+              <Loading />
+            ) : (
+              courses.map((course, index) => (
+                <CardItemThree
+                  key={index}
+                  text={course.name}
+                  buttonLink={`/courses/${course.id}`}
+                />
+              ))
+            )}
           </Card>
         </div>
         <div className="col-md-5 col-12">
           <Card title="Scheduled Exams">
-            {scheduledExams.map((exam, index) => (
-              <CardItemOne
-                key={index}
-                title={exam.course_short_name}
-                description={exam.exam_title}
-                text={exam.exam_date}
-                buttonLink={`/courses/${exam.exam.course_id}/exams/${exam.exam.id}`}
-              />
-            ))}
+            {loading ? (
+              <Loading />
+            ) : (
+              scheduledExams.map((exam, index) => (
+                <CardItemOne
+                  key={index}
+                  title={exam.course_short_name}
+                  description={exam.exam_title}
+                  text={exam.exam_date}
+                  buttonLink={`/courses/${exam.exam.course_id}/exams/${exam.exam.id}`}
+                />
+              ))
+            )}
           </Card>
         </div>
       </div>
