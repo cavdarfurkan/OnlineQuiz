@@ -13,6 +13,7 @@ import Root from "./pages/Root";
 import ProtectedRoute from "./components/ProtectedRoute";
 import CoursesList from "./pages/CoursesList";
 import JoinCoursePage from "./pages/JoinCoursePage";
+import CourseDetailsPage from "./pages/CourseDetailsPage";
 
 const router = createBrowserRouter([
   {
@@ -48,7 +49,7 @@ const router = createBrowserRouter([
           },
           {
             path: "courses/:id",
-            element: <div>Course Detail</div>,
+            element: <CourseDetailsPage />,
           },
           {
             path: "courses/:id/edit",

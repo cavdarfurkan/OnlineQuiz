@@ -90,6 +90,9 @@ const JoinCoursePage = () => {
                   buttonLink={`/courses/${course.id}`}
                 />
               ))}
+              {upcomingCourses.length === 0 && (
+                <div className="text-center">No courses available</div>
+              )}
             </Card>
           )}
         </div>

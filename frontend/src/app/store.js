@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { api } from "./api/api";
 import { userSlice } from "./features/user/userSlice";
-import { sidebarSlice } from "../components/sidebar/sidebarSlice";
+import { sidebarSlice } from "./features/sidebar/sidebarSlice";
 import {
   studentDashboardSlice,
   studentCoursesSlice,

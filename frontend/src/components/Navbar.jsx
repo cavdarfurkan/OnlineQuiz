@@ -1,6 +1,6 @@
-import Sidebar from "./sidebar/Sidebar";
+import Sidebar from "../app/features/sidebar/Sidebar";
 import { FaBars, FaCircleUser, FaX } from "react-icons/fa6";
-import { toggleSidebar } from "../components/sidebar/sidebarSlice";
+import { toggleSidebar } from "../app/features/sidebar/sidebarSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 const Navbar = () => {
