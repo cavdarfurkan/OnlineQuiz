@@ -6,6 +6,7 @@ import {
   studentDashboardSlice,
   studentCoursesSlice,
 } from "./features/student/studentSlice";
+import { examSlice } from "./features/exam/examSlice";
 
 import "./api/auth";
 import "./api/course";
@@ -18,6 +19,7 @@ export const store = configureStore({
     sidebar: sidebarSlice.reducer,
     studentDashboardSlice: studentDashboardSlice.reducer,
     studentCoursesSlice: studentCoursesSlice.reducer,
+    examSlice: examSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(api.middleware),

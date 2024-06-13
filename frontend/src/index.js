@@ -15,6 +15,7 @@ import CoursesList from "./pages/CoursesList";
 import JoinCoursePage from "./pages/JoinCoursePage";
 import CourseDetailsPage from "./pages/CourseDetailsPage";
 import CourseExams from "./pages/CourseExams";
+import ExamPage from "./pages/ExamPage";
 
 const router = createBrowserRouter([
   {
@@ -61,15 +62,15 @@ const router = createBrowserRouter([
             element: <div>Edit Course</div>,
           },
           {
-            path: "courses/:id/exams/:examId",
-            element: <div>Yandik</div>,
+            path: "exams/:examId",
+            element: <ExamPage />,
           },
           {
-            path: "courses/:id/exams/:examId/submit",
+            path: "exams/:examId/submit",
             element: <div>Submit Exam</div>,
           },
           {
-            path: "courses/:id/exams/:examId/edit",
+            path: "exams/:examId/edit",
             element: <div>Edit Exam</div>,
           },
           {

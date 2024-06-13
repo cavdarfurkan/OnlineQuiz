@@ -39,6 +39,7 @@ export const getStudentDashboardData = createAsyncThunk(
           .join(" ")
           .split(".")[0]
           .replace("T", " "),
+        exam_date_timestamp: new Date(exam.date).getTime(),
         exam: exam,
       };
     });
@@ -137,6 +138,7 @@ export const getStudentCourses = createAsyncThunk(
           .join(" ")
           .split(".")[0]
           .replace("T", " "),
+        exam_date_timestamp: new Date(exam.date).getTime(),
         exam: exam,
       };
     });

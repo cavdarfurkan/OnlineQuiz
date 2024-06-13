@@ -21,6 +21,7 @@ export const examApi = api.injectEndpoints({
               .join(" ")
               .split(".")[0]
               .replace("T", " "),
+            timestamp: new Date(date).getTime(),
           };
         });
       },
@@ -30,6 +31,29 @@ export const examApi = api.injectEndpoints({
     }),
     getExamById: builder.query({
       query: (examId) => `exams/${examId}`,
+    }),
+    submitExam: builder.mutation({
+      query: ({ examId, startTime, endTime, grade }) => ({
+        url: `exams/student-exams/${examId}`,
+        method: "POST",
+        body: {
+          start_time: startTime,
+          end_time: endTime,
+          grade: grade,
+        },
+      }),
+    }),
+    submitAnswers: builder.mutation({
+      query: ({ questionId, answeredOptionId }) => ({
+        url: `questions/${questionId}/answer`,
+        method: "POST",
+        body: {
+          answered_option_id: answeredOptionId,
+        },
+      }),
+      transformErrorResponse: (response) => {
+        return response.data;
+      },
     }),
   }),
 });

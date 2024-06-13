@@ -1,7 +1,13 @@
 import { FaChevronRight } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 
-export const CardItemOne = ({ title, description, text, buttonLink = "" }) => {
+export const CardItemOne = ({
+  title,
+  description,
+  text,
+  buttonLink = "",
+  disabled,
+}) => {
   return (
     <div className="card text-bg-light">
       <div className="row align-items-center justify-content-between">
@@ -14,7 +20,12 @@ export const CardItemOne = ({ title, description, text, buttonLink = "" }) => {
         </div>
         {buttonLink && (
           <div className="col-sm-4 col-6 text-end pe-5 w-auto">
-            <Link to={buttonLink} className="btn btn-primary d-flex">
+            <Link
+              to={buttonLink}
+              className={
+                (disabled ? "disabled " : "") + "btn btn-primary d-flex"
+              }
+            >
               <FaChevronRight />
             </Link>
           </div>

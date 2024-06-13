@@ -38,7 +38,8 @@ const Dashboard = () => {
                   title={exam.course_short_name}
                   description={exam.exam_title}
                   text={exam.exam_date}
-                  buttonLink={`/courses/${exam.exam.course_id}/exams/${exam.exam.id}`}
+                  buttonLink={`/exams/${exam.exam.id}`}
+                  disabled={exam.exam_date_timestamp < new Date().getTime()}
                 />
               ))
             )}
@@ -54,7 +55,7 @@ const Dashboard = () => {
                   key={index}
                   title={grade.course_short_name}
                   description={grade.exam_title}
-                  text={grade.grade}
+                  text={grade.grade.toString()}
                 />
               ))
             )}

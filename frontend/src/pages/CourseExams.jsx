@@ -5,7 +5,10 @@ import Loading from "../components/Loading";
 import { CardItemOne } from "../components/card/CardItems";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { changeMenuItemVisibility } from "../app/features/sidebar/sidebarSlice";
+import {
+  updateMenuItemPath,
+  changeMenuItemVisibility,
+} from "../app/features/sidebar/sidebarSlice";
 
 const CourseExams = () => {
   const dispatch = useDispatch();
@@ -14,12 +17,18 @@ const CourseExams = () => {
 
   useEffect(() => {
     dispatch(
+      updateMenuItemPath({
+        index: 4,
+        path: `/courses/${id}/exams`,
+      })
+    );
+    dispatch(
       changeMenuItemVisibility({
         index: 4,
         show: true,
       })
     );
-  }, [dispatch]);
+  }, [dispatch, id]);
 
   return (
     <div>
@@ -35,7 +44,8 @@ const CourseExams = () => {
               title={exam.title}
               description={"Duration: " + exam.duration_min + " minutes"}
               text={exam.date}
-              buttonLink={`/courses/${id}/exams/${exam.id}`}
+              buttonLink={`/exams/${exam.id}`}
+              disabled={exam.timestamp < new Date().getTime()}
             />
           ))}
           {exams.length === 0 && (
