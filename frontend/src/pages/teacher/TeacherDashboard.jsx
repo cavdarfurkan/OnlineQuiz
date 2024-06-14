@@ -1,8 +1,9 @@
-import { useDispatch } from "react-redux";
 import { useGetCoursesByUserQuery } from "../../app/api/course";
+import Card from "../../components/card/Card";
+import Loading from "../../components/Loading";
+import { CardItemThree } from "../../components/card/CardItems";
 
 const TeacherDashboard = () => {
-  const dispatch = useDispatch();
   const { data, isError, isLoading, error } = useGetCoursesByUserQuery();
 
   if (isError) {
@@ -11,20 +12,27 @@ const TeacherDashboard = () => {
   }
 
   return (
-    <div>
-      <h1>Dashboard</h1>
-      {isLoading ? (
-        <div>Loading...</div>
-      ) : isError ? (
-        <div>Error</div>
-      ) : (
-        <div>
-          {data.map((course) => (
-            <div key={course.id}>{course.name}</div>
-          ))}
-        </div>
-      )}
-    </div>
+    <>
+      <div>
+        <h1>Dashboard</h1>
+        <hr />
+      </div>
+      <div className="row justify-content-center">
+        <Card title="Courses">
+          {isLoading ? (
+            <Loading />
+          ) : (
+            data.map((course, index) => (
+              <CardItemThree
+                key={index}
+                text={`${course.short_name} - ${course.name}`}
+                buttonLink={`/courses/${course.id}`}
+              />
+            ))
+          )}
+        </Card>
+      </div>
+    </>
   );
 };
 
