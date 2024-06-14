@@ -19,6 +19,7 @@ import EditCoursePage from "./pages/teacher/EditCoursePage";
 import CourseExams from "./pages/CourseExams";
 import NewExamPage from "./pages/teacher/NewExamPage";
 import NotFoundPage from "./pages/NotFoundPage";
+import Logout from "./components/auth/Logout";
 
 const router = createBrowserRouter([
   {
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
   {
     path: "/signup",
     element: <SignupPage />,
+  },
+  {
+    path: "/logout",
+    element: <Logout />,
   },
   {
     element: <ProtectedRoute roles={["student", "teacher", "admin"]} />,

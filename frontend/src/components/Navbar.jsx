@@ -2,6 +2,7 @@ import Sidebar from "../app/features/sidebar/Sidebar";
 import { FaBars, FaCircleUser, FaX } from "react-icons/fa6";
 import { toggleSidebar } from "../app/features/sidebar/sidebarSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const showSidebar = useSelector((state) => state.sidebar.showSidebar);
@@ -25,19 +26,9 @@ const Navbar = () => {
             </div>
             <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
               <li>
-                <a className="dropdown-item" href="#">
-                  Action
-                </a>
-              </li>
-              <li>
-                <a className="dropdown-item" href="#">
-                  Another action
-                </a>
-              </li>
-              <li>
-                <a className="dropdown-item" href="#">
-                  Something else here
-                </a>
+                <Link to="/logout" className="dropdown-item">
+                  Logout
+                </Link>
               </li>
             </ul>
           </div>
