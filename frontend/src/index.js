@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import App from "./App";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
@@ -22,6 +23,10 @@ import NotFoundPage from "./pages/NotFoundPage";
 import Logout from "./components/auth/Logout";
 
 const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />,
+  },
   {
     path: "/login",
     element: <LoginPage />,

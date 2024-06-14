@@ -1,25 +1,15 @@
-import logo from "./logo.svg";
-import "./App.css";
+import { Navigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  const user = Cookies.get("user");
+  const isAuthenticated = user ? true : false;
+
+  if (isAuthenticated) {
+    return <Navigate to="/dashboard" />;
+  }
+
+  return <Navigate to="/login" />;
 }
 
 export default App;
