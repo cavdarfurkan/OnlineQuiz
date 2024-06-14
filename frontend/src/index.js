@@ -9,13 +9,13 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import Root from "./pages/Root";
-import Dashboard from "./pages/student/StudentDashboard";
 import CoursesList from "./pages/student/CoursesList";
 import JoinCoursePage from "./pages/student/JoinCoursePage";
 import CourseDetailsPage from "./pages/student/CourseDetailsPage";
 import CourseExams from "./pages/student/CourseExams";
 import ExamPage from "./pages/student/ExamPage";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Dashboard from "./pages/Dashboard";
 
 const router = createBrowserRouter([
   {
@@ -32,7 +32,7 @@ const router = createBrowserRouter([
     element: <SignupPage />,
   },
   {
-    element: <ProtectedRoute roles={["student"]} />,
+    element: <ProtectedRoute roles={["student", "teacher", "admin"]} />,
     children: [
       {
         element: <Root />,
@@ -41,6 +41,16 @@ const router = createBrowserRouter([
             path: "dashboard",
             element: <Dashboard />,
           },
+        ],
+      },
+    ],
+  },
+  {
+    element: <ProtectedRoute roles={["student"]} />,
+    children: [
+      {
+        element: <Root />,
+        children: [
           {
             path: "courses",
             element: <CoursesList />,
@@ -70,12 +80,7 @@ const router = createBrowserRouter([
     children: [
       {
         element: <Root />,
-        children: [
-          {
-            path: "dashboard",
-            // element: <TeacherDashboard />
-          },
-        ],
+        children: [],
       },
     ],
   },
