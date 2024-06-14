@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { getStudentCourses } from "../../app/features/student/studentSlice";
 import Loading from "../../components/Loading";
 
-const CoursesList = () => {
+const StudentCourses = () => {
   const dispatch = useDispatch();
   const { courses, scheduledExams, loading, error } = useSelector(
     (state) => state.studentCoursesSlice
@@ -64,4 +64,4 @@ const CoursesList = () => {
   );
 };
 
-export default CoursesList;
+export default StudentCourses;

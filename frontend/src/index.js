@@ -9,13 +9,13 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import Root from "./pages/Root";
-import CoursesList from "./pages/student/CoursesList";
 import JoinCoursePage from "./pages/student/JoinCoursePage";
 import CourseDetailsPage from "./pages/student/CourseDetailsPage";
 import CourseExams from "./pages/student/CourseExams";
 import ExamPage from "./pages/student/ExamPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Dashboard from "./pages/Dashboard";
+import CoursesPage from "./pages/CoursesPage";
 
 const router = createBrowserRouter([
   {
@@ -41,6 +41,10 @@ const router = createBrowserRouter([
             path: "dashboard",
             element: <Dashboard />,
           },
+          {
+            path: "courses",
+            element: <CoursesPage />,
+          },
         ],
       },
     ],
@@ -51,10 +55,6 @@ const router = createBrowserRouter([
       {
         element: <Root />,
         children: [
-          {
-            path: "courses",
-            element: <CoursesList />,
-          },
           {
             path: "courses/join",
             element: <JoinCoursePage />,
