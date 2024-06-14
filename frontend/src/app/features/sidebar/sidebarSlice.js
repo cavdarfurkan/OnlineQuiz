@@ -19,6 +19,13 @@ const initialState = {
       icon: "school",
       children: [
         {
+          index: 8,
+          visible: true,
+          roles: ["teacher"],
+          title: "New Course",
+          path: "/courses/new",
+        },
+        {
           index: 2,
           visible: true,
           roles: ["student", "teacher"],

@@ -7,6 +7,7 @@ export const courseApi = api.injectEndpoints({
         url: "courses",
         method: "GET",
       }),
+      providesTags: ["UserCourses"],
     }),
     getCourseById: builder.query({
       query: (courseId) => `courses/${courseId}`,
@@ -24,7 +25,12 @@ export const courseApi = api.injectEndpoints({
           invitation: invitationQueryParam,
         },
       }),
-      invalidatesTags: ["UpcomingCourses", "CourseDetail", "CourseStudents"],
+      invalidatesTags: [
+        "UpcomingCourses",
+        "CourseDetail",
+        "CourseStudents",
+        "UserCourses",
+      ],
     }),
     getUpcomingCourses: builder.query({
       query: () => ({
@@ -47,6 +53,14 @@ export const courseApi = api.injectEndpoints({
         });
       },
     }),
+    createCourse: builder.mutation({
+      query: (course) => ({
+        url: "courses",
+        method: "POST",
+        body: course,
+      }),
+      invalidatesTags: ["UpcomingCourses", "UserCourses"],
+    }),
   }),
 });
 
@@ -56,4 +70,5 @@ export const {
   useGetStudensByCourseIdQuery,
   useJoinCourseMutation,
   useGetUpcomingCoursesQuery,
+  useCreateCourseMutation,
 } = courseApi;

@@ -16,6 +16,7 @@ import ExamPage from "./pages/student/ExamPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Dashboard from "./pages/Dashboard";
 import CoursesPage from "./pages/CoursesPage";
+import NewCoursePage from "./pages/teacher/NewCoursePage";
 
 const router = createBrowserRouter([
   {
@@ -80,7 +81,12 @@ const router = createBrowserRouter([
     children: [
       {
         element: <Root />,
-        children: [],
+        children: [
+          {
+            path: "courses/new",
+            element: <NewCoursePage />,
+          },
+        ],
       },
     ],
   },
