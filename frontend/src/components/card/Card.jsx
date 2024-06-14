@@ -1,10 +1,12 @@
-const Card = ({ title, children }) => {
+import HeaderButton from "./HeaderButton";
+
+const Card = ({ title, headerButtonText, headerButtonCallback, children }) => {
   return (
     <div className={"card"}>
       {title && (
         <div className="card-header fs-5 d-flex align-items-center">
           {title}
-          {/* <button type="button" className="btn btn-primary ms-auto">Add</button> */}
+          {headerButtonText && <HeaderButton title={headerButtonText} />}
         </div>
       )}
       <div className="d-flex flex-column gap-3 p-3">{children}</div>
