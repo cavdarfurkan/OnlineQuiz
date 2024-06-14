@@ -10,7 +10,6 @@ import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import Root from "./pages/Root";
 import JoinCoursePage from "./pages/student/JoinCoursePage";
-import CourseExams from "./pages/student/CourseExams";
 import ExamPage from "./pages/student/ExamPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Dashboard from "./pages/Dashboard";
@@ -18,6 +17,8 @@ import CoursesPage from "./pages/CoursesPage";
 import NewCoursePage from "./pages/teacher/NewCoursePage";
 import CourseDetailsPage from "./pages/CourseDetailsPage";
 import EditCoursePage from "./pages/teacher/EditCoursePage";
+import CourseExams from "./pages/CourseExams";
+import NewExamPage from "./pages/teacher/NewExamPage";
 
 const router = createBrowserRouter([
   {
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
             path: "courses/:id",
             element: <CourseDetailsPage />,
           },
+          {
+            path: "courses/:id/exams",
+            element: <CourseExams />,
+          },
         ],
       },
     ],
@@ -64,10 +69,6 @@ const router = createBrowserRouter([
           {
             path: "courses/join",
             element: <JoinCoursePage />,
-          },
-          {
-            path: "courses/:id/exams",
-            element: <CourseExams />,
           },
           {
             path: "exams/:examId",
@@ -90,6 +91,10 @@ const router = createBrowserRouter([
           {
             path: "courses/:id/edit",
             element: <EditCoursePage />,
+          },
+          {
+            path: "courses/:courseId/exams/new",
+            element: <NewExamPage />,
           },
         ],
       },

@@ -10,6 +10,7 @@ export const examApi = api.injectEndpoints({
           courseId: courseIdParam,
         },
       }),
+      providesTags: ["Exams"],
       transformResponse: (response) => {
         return response.map((exam) => {
           const { date, ...data } = exam;
@@ -28,9 +29,11 @@ export const examApi = api.injectEndpoints({
     }),
     getStudentExams: builder.query({
       query: (studentId) => `exams/student-exams/${studentId}`,
+      providesTags: ["Exams"],
     }),
     getExamById: builder.query({
       query: (examId) => `exams/${examId}`,
+      providesTags: ["Exam"],
     }),
     submitExam: builder.mutation({
       query: ({ examId, startTime, endTime, grade }) => ({
@@ -42,6 +45,7 @@ export const examApi = api.injectEndpoints({
           grade: grade,
         },
       }),
+      invalidatesTags: ["Exams"],
     }),
     submitAnswers: builder.mutation({
       query: ({ questionId, answeredOptionId }) => ({
@@ -55,7 +59,26 @@ export const examApi = api.injectEndpoints({
         return response.data;
       },
     }),
+    deleteExam: builder.mutation({
+      query: (examId) => ({
+        url: `exams/${examId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Exams", "Exam"],
+    }),
+    createExam: builder.mutation({
+      query: (exam) => ({
+        url: "exams",
+        method: "POST",
+        body: exam,
+      }),
+      invalidatesTags: ["Exams"],
+    }),
   }),
 });
 
-export const { useGetExamsByCourseIdQuery } = examApi;
+export const {
+  useGetExamsByCourseIdQuery,
+  useDeleteExamMutation,
+  useCreateExamMutation,
+} = examApi;

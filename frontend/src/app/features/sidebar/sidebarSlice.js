@@ -50,9 +50,8 @@ const initialState = {
     {
       index: 4,
       visible: false,
-      roles: ["student"],
+      roles: ["student", "teacher"],
       title: "Exams",
-      // icon: "",
       path: "courses/:courseId/exams",
     },
     {

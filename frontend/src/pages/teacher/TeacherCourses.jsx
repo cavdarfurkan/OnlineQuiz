@@ -39,7 +39,7 @@ const TeacherCourses = () => {
       </div>
       <div className="row justify-content-between gy-3">
         <div className="col-md-7 col-12">
-          <Card title="Courses" headerButtonText="New Course">
+          <Card title="Courses" headerButtonText="New Course" headerButtonLink="/courses/new">
             {isLoading ? (
               <Loading />
             ) : (

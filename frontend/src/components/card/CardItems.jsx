@@ -1,4 +1,4 @@
-import { FaChevronRight } from "react-icons/fa6";
+import { FaChevronRight, FaTrash } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 
 export const CardItemOne = ({
@@ -6,30 +6,45 @@ export const CardItemOne = ({
   description,
   text,
   buttonLink = "",
+  deleteCallback,
   disabled,
 }) => {
   return (
     <div className="card text-bg-light">
       <div className="row align-items-center justify-content-between">
-        <div className={buttonLink ? "col-sm-8 col-6" : "col-12"}>
+        <div className={buttonLink ? "col-sm-8 col-6" : "col-8"}>
           <div className="card-body">
             <div className="card-title">{title}</div>
             <div className="card-text">{description}</div>
             <small className="card-text text-muted">{text}</small>
           </div>
         </div>
-        {buttonLink && (
-          <div className="col-sm-4 col-6 text-end pe-5 w-auto">
-            <Link
-              to={buttonLink}
-              className={
-                (disabled ? "disabled " : "") + "btn btn-primary d-flex"
-              }
-            >
-              <FaChevronRight />
-            </Link>
-          </div>
-        )}
+        <div className="col-sm-4 col-6 d-flex justify-content-end">
+          {deleteCallback && (
+            <div className="text-end pe-5">
+              <button
+                className={
+                  (disabled ? "disabled " : "") + "btn btn-danger d-flex"
+                }
+                onClick={deleteCallback}
+              >
+                <FaTrash />
+              </button>
+            </div>
+          )}
+          {buttonLink && (
+            <div className="text-end pe-5">
+              <Link
+                to={buttonLink}
+                className={
+                  (disabled ? "disabled " : "") + "btn btn-primary d-flex"
+                }
+              >
+                <FaChevronRight />
+              </Link>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

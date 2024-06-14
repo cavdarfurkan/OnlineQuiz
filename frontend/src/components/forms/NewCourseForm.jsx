@@ -119,7 +119,6 @@ const NewCourseForm = () => {
             />
           </div>
 
-          {/* <div className="input-group gap-2"> */}
           <div className="form-floating">
             <Field
               type="date"
@@ -135,23 +134,6 @@ const NewCourseForm = () => {
               className="ms-1 text-danger text-start form-text"
             />
           </div>
-
-          {/* <div className="form-floating">
-              <Field
-                type="time"
-                id="courseStartTime"
-                name="courseStartTime"
-                placeholder="Course Start Time"
-                className="form-control"
-              />
-              <label htmlFor="courseStartTime">Course Start Time</label>
-              <ErrorMessage
-                name="courseStartTime"
-                component="div"
-                className="ms-1 text-danger text-start form-text"
-              />
-            </div> */}
-          {/* </div> */}
 
           <div className="mt-2">
             {isError && (

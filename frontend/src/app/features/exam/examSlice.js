@@ -156,5 +156,35 @@ export const examSlice = createSlice({
   },
 });
 
+///////////////////////////
+
+export const newExamSlice = createSlice({
+  name: "newExamSlice",
+  initialState: {
+    examTitle: "",
+    examStartDate: "",
+    examDuration: "",
+    passPercent: "",
+    examQuestions: [],
+    isLoading: false,
+    error: null,
+  },
+  reducers: {
+    setExam: (state, action) => {
+      const { examTitle, examStartDate, examDuration, passPercent } =
+        action.payload;
+      state.examTitle = examTitle;
+      state.examStartDate = examStartDate;
+      state.examDuration = examDuration;
+      state.passPercent = passPercent;
+    },
+    addQuestion: (state, action) => {
+      state.examQuestions.push(action.payload);
+    },
+  },
+});
+
 export const { setStartTime, setEndTime, addCorrectOption, setGrade } =
   examSlice.actions;
+
+export const { setExam, addQuestion } = newExamSlice.actions;

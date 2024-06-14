@@ -10,7 +10,7 @@ import {
   changeMenuItemVisibility,
 } from "../../app/features/sidebar/sidebarSlice";
 
-const CourseExams = () => {
+const StudentCourseExams = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
   const { data: exams, isLoading, isError } = useGetExamsByCourseIdQuery(id);
@@ -57,4 +57,4 @@ const CourseExams = () => {
   );
 };
 
-export default CourseExams;
+export default StudentCourseExams;

@@ -6,7 +6,7 @@ import {
   studentDashboardSlice,
   studentCoursesSlice,
 } from "./features/student/studentSlice";
-import { examSlice } from "./features/exam/examSlice";
+import { examSlice, newExamSlice } from "./features/exam/examSlice";
 import { teacherExamsSlice } from "./features/teacher/teacherExamsSlice";
 
 import "./api/auth";
@@ -22,6 +22,7 @@ export const store = configureStore({
     studentCoursesSlice: studentCoursesSlice.reducer,
     examSlice: examSlice.reducer,
     teacherExamsSlice: teacherExamsSlice.reducer,
+    newExamSlice: newExamSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(api.middleware),

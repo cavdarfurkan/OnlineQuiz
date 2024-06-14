@@ -26,7 +26,6 @@ const TeacherCourseDetailsPage = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      console.log(data);
       if (data.teacher_id === user.id) {
         setIsOwnCourse(true);
       }
@@ -39,6 +38,12 @@ const TeacherCourseDetailsPage = () => {
         updateMenuItemPath({
           index: 6,
           path: `/courses/${id}/edit`,
+        })
+      );
+      dispatch(
+        updateMenuItemPath({
+          index: 4,
+          path: `/courses/${id}/exams`,
         })
       );
       dispatch(

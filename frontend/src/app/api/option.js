@@ -11,7 +11,19 @@ export const optionApi = api.injectEndpoints({
         },
       }),
     }),
+    createOption: builder.mutation({
+      query: ({ questionId, optionText, isCorrect }) => ({
+        url: "options",
+        method: "POST",
+        body: {
+          question_id: questionId,
+          option_text: optionText,
+          is_correct: isCorrect,
+        },
+      }),
+    }),
   }),
 });
 
-export const { useGetOptionsByQuestionIdQuery } = optionApi;
+export const { useGetOptionsByQuestionIdQuery, useCreateOptionMutation } =
+  optionApi;

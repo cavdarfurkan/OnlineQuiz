@@ -7,11 +7,6 @@ import {
 } from "../../app/api/course";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
-import {
-  changeMenuItemVisibility,
-  updateMenuItemPath,
-} from "../../app/features/sidebar/sidebarSlice";
 
 const editCourseSchema = Yup.object().shape({
   courseName: Yup.string()
@@ -33,7 +28,6 @@ const editCourseSchema = Yup.object().shape({
 const EditCourseForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const [editCourse, { isError, isLoading, error }] = useEditCourseMutation();
   const { data: course, isSuccess: courseIsSuccess } =
@@ -46,33 +40,6 @@ const EditCourseForm = () => {
     courseStartDate: "",
     isArchived: false,
   });
-
-  useEffect(() => {
-    dispatch(
-      updateMenuItemPath({
-        index: 6,
-        path: `/courses/${id}/edit`,
-      })
-    );
-    dispatch(
-      changeMenuItemVisibility({
-        index: 4,
-        show: true,
-      })
-    );
-    dispatch(
-      changeMenuItemVisibility({
-        index: 6,
-        show: true,
-      })
-    );
-    dispatch(
-      changeMenuItemVisibility({
-        index: 7,
-        show: true,
-      })
-    );
-  }, [dispatch, id]);
 
   useEffect(() => {
     if (courseIsSuccess) {
@@ -123,7 +90,7 @@ const EditCourseForm = () => {
       courseStartDate: "",
     });
 
-    // return navigate("/courses");
+    return navigate("/courses");
   };
 
   return (
