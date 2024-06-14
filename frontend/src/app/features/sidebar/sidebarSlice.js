@@ -61,13 +61,6 @@ const initialState = {
       title: "Edit Course",
       path: "/courses/:courseId/edit",
     },
-    {
-      index: 7,
-      visible: false,
-      roles: ["teacher"],
-      title: "Archive Course",
-      path: "/courses/:courseId/archive",
-    },
   ],
   expandedSections: {},
 };

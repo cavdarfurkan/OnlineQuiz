@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import {
   changeMenuItemVisibility,
@@ -13,7 +13,6 @@ import Loading from "../../components/Loading";
 import { CardItemOne } from "../../components/card/CardItems";
 import Card from "../../components/card/Card";
 import { toast } from "react-toastify";
-import QuestionModal from "../../components/QuestionModal";
 
 const TeacherCourseExams = () => {
   const { id } = useParams();

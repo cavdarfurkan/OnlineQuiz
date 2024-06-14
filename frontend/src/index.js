@@ -1,7 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
-import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
 import { store } from "./app/store";
@@ -19,6 +18,7 @@ import CourseDetailsPage from "./pages/CourseDetailsPage";
 import EditCoursePage from "./pages/teacher/EditCoursePage";
 import CourseExams from "./pages/CourseExams";
 import NewExamPage from "./pages/teacher/NewExamPage";
+import NotFoundPage from "./pages/NotFoundPage";
 
 const router = createBrowserRouter([
   {
@@ -101,27 +101,8 @@ const router = createBrowserRouter([
     ],
   },
   {
-    element: <ProtectedRoute roles={["student", "teacher"]} />,
-    children: [
-      {
-        element: <Root />,
-        children: [
-          {
-            path: "profile",
-            element: <div>Profile</div>,
-          },
-          {
-            path: "settings",
-            element: <div>Settings</div>,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    // Error page
     path: "*",
-    element: <App />,
+    element: <NotFoundPage />,
   },
 ]);
 
