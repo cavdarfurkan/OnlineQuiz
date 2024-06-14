@@ -1,14 +1,14 @@
 import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import useTimer from "../hooks/useTimer";
+import useTimer from "../../hooks/useTimer";
 import {
   getExamDetails,
   setStartTime,
   setEndTime,
   submitExam,
-} from "../app/features/exam/examSlice";
-import Loading from "../components/Loading";
+} from "../../app/features/exam/examSlice";
+import Loading from "../../components/Loading";
 import { Field, Form, Formik } from "formik";
 
 const ExamPage = () => {

@@ -1,9 +1,9 @@
 import { useDispatch, useSelector } from "react-redux";
-import Card from "../components/card/Card";
-import { CardItemOne, CardItemThree } from "../components/card/CardItems";
+import Card from "../../components/card/Card";
+import { CardItemOne, CardItemThree } from "../../components/card/CardItems";
 import { useEffect } from "react";
-import { getStudentCourses } from "../app/features/student/studentSlice";
-import Loading from "../components/Loading";
+import { getStudentCourses } from "../../app/features/student/studentSlice";
+import Loading from "../../components/Loading";
 
 const CoursesList = () => {
   const dispatch = useDispatch();

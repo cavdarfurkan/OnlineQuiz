@@ -1,7 +1,7 @@
 import * as Yup from "yup";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../../app/api/auth";
 import Loading from "../Loading";
 import { useDispatch } from "react-redux";
@@ -17,6 +17,7 @@ const loginSchema = Yup.object().shape({
 
 const LoginForm = ({ role, userEmail, roleChangeCallback }) => {
   const [email, setEmail] = useState(userEmail || "");
+  const navigate = useNavigate();
 
   const dispatch = useDispatch();
   const [login, { isError, isLoading, error }] = useLoginMutation();
@@ -40,6 +41,8 @@ const LoginForm = ({ role, userEmail, roleChangeCallback }) => {
           role: payload.user.role,
         })
       );
+
+      return navigate("/dashboard");
     } catch (error) {
       console.error(error);
     }

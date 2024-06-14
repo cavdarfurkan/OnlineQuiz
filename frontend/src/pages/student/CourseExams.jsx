@@ -1,14 +1,14 @@
 import { useParams } from "react-router-dom";
-import { useGetExamsByCourseIdQuery } from "../app/api/exam";
-import Card from "../components/card/Card";
-import Loading from "../components/Loading";
-import { CardItemOne } from "../components/card/CardItems";
+import { useGetExamsByCourseIdQuery } from "../../app/api/exam";
+import Card from "../../components/card/Card";
+import Loading from "../../components/Loading";
+import { CardItemOne } from "../../components/card/CardItems";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import {
   updateMenuItemPath,
   changeMenuItemVisibility,
-} from "../app/features/sidebar/sidebarSlice";
+} from "../../app/features/sidebar/sidebarSlice";
 
 const CourseExams = () => {
   const dispatch = useDispatch();

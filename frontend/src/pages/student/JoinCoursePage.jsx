@@ -1,11 +1,11 @@
 import * as Yup from "yup";
-import Loading from "../components/Loading";
+import Loading from "../../components/Loading";
 import {
   useGetUpcomingCoursesQuery,
   useJoinCourseMutation,
-} from "../app/api/course";
-import Card from "../components/card/Card";
-import { CardItemOne } from "../components/card/CardItems";
+} from "../../app/api/course";
+import Card from "../../components/card/Card";
+import { CardItemOne } from "../../components/card/CardItems";
 import { Field, Formik, Form, ErrorMessage } from "formik";
 import { FaEnvelope } from "react-icons/fa6";
 

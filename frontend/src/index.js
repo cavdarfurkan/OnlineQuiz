@@ -8,14 +8,14 @@ import { store } from "./app/store";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
-import Dashboard from "./pages/Dashboard";
 import Root from "./pages/Root";
+import Dashboard from "./pages/student/StudentDashboard";
+import CoursesList from "./pages/student/CoursesList";
+import JoinCoursePage from "./pages/student/JoinCoursePage";
+import CourseDetailsPage from "./pages/student/CourseDetailsPage";
+import CourseExams from "./pages/student/CourseExams";
+import ExamPage from "./pages/student/ExamPage";
 import ProtectedRoute from "./components/ProtectedRoute";
-import CoursesList from "./pages/CoursesList";
-import JoinCoursePage from "./pages/JoinCoursePage";
-import CourseDetailsPage from "./pages/CourseDetailsPage";
-import CourseExams from "./pages/CourseExams";
-import ExamPage from "./pages/ExamPage";
 
 const router = createBrowserRouter([
   {
@@ -32,7 +32,7 @@ const router = createBrowserRouter([
     element: <SignupPage />,
   },
   {
-    element: <ProtectedRoute />,
+    element: <ProtectedRoute roles={["student"]} />,
     children: [
       {
         element: <Root />,
@@ -58,21 +58,33 @@ const router = createBrowserRouter([
             element: <CourseExams />,
           },
           {
-            path: "courses/:id/edit",
-            element: <div>Edit Course</div>,
-          },
-          {
             path: "exams/:examId",
             element: <ExamPage />,
           },
+        ],
+      },
+    ],
+  },
+  {
+    element: <ProtectedRoute roles={["teacher"]} />,
+    children: [
+      {
+        element: <Root />,
+        children: [
           {
-            path: "exams/:examId/submit",
-            element: <div>Submit Exam</div>,
+            path: "dashboard",
+            // element: <TeacherDashboard />
           },
-          {
-            path: "exams/:examId/edit",
-            element: <div>Edit Exam</div>,
-          },
+        ],
+      },
+    ],
+  },
+  {
+    element: <ProtectedRoute roles={["student", "teacher"]} />,
+    children: [
+      {
+        element: <Root />,
+        children: [
           {
             path: "profile",
             element: <div>Profile</div>,
@@ -101,7 +113,4 @@ root.render(
   </React.StrictMode>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();

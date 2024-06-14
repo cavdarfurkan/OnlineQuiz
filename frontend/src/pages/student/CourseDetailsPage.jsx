@@ -3,9 +3,9 @@ import {
   useGetCourseByIdQuery,
   useGetStudensByCourseIdQuery,
   useJoinCourseMutation,
-} from "../app/api/course";
-import Card from "../components/card/Card";
-import Loading from "../components/Loading";
+} from "../../app/api/course";
+import Card from "../../components/card/Card";
+import Loading from "../../components/Loading";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import { FaEnvelope } from "react-icons/fa6";
@@ -13,7 +13,7 @@ import { useDispatch } from "react-redux";
 import {
   changeMenuItemVisibility,
   updateMenuItemPath,
-} from "../app/features/sidebar/sidebarSlice";
+} from "../../app/features/sidebar/sidebarSlice";
 
 const CourseDetailsPage = () => {
   const [isStudentJoined, setIsStudentJoined] = useState(false);

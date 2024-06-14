@@ -1,11 +1,11 @@
 import { useEffect } from "react";
-import Card from "../components/card/Card";
-import { CardItemOne, CardItemTwo } from "../components/card/CardItems";
+import Card from "../../components/card/Card";
+import { CardItemOne, CardItemTwo } from "../../components/card/CardItems";
 import { useDispatch, useSelector } from "react-redux";
-import { getStudentDashboardData } from "../app/features/student/studentSlice";
-import Loading from "../components/Loading";
+import { getStudentDashboardData } from "../../app/features/student/studentSlice";
+import Loading from "../../components/Loading";
 
-const Dashboard = () => {
+const StudentDashboard = () => {
   const dispatch = useDispatch();
 
   const { scheduledExams, grades, loading, error } = useSelector(
@@ -66,4 +66,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default StudentDashboard;
