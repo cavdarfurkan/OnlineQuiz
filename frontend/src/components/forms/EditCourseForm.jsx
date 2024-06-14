@@ -1,10 +1,19 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import * as Yup from "yup";
-import { useCreateCourseMutation } from "../../app/api/course";
-import { useNavigate } from "react-router-dom";
+import {
+  useEditCourseMutation,
+  useGetCourseByIdQuery,
+} from "../../app/api/course";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import {
+  changeMenuItemVisibility,
+  updateMenuItemPath,
+} from "../../app/features/sidebar/sidebarSlice";
 
-const newCourseSchema = Yup.object().shape({
+const editCourseSchema = Yup.object().shape({
   courseName: Yup.string()
     .required("Name is required")
     .min(5, "Name is too short")
@@ -18,35 +27,92 @@ const newCourseSchema = Yup.object().shape({
     .min(5, "Description is too short")
     .trim(),
   courseStartDate: Yup.date("Invalid date").required("Start date is required"),
+  isArchived: Yup.boolean().required("Is archived is required"),
 });
 
-const NewCourseForm = () => {
+const EditCourseForm = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const [editCourse, { isError, isLoading, error }] = useEditCourseMutation();
+  const { data: course, isSuccess: courseIsSuccess } =
+    useGetCourseByIdQuery(id);
+
   const [formData, setFormData] = useState({
     courseName: "",
     courseShortName: "",
     courseDescription: "",
     courseStartDate: "",
+    isArchived: false,
   });
 
-  const [createCourse, { isError, isLoading, error }] =
-    useCreateCourseMutation();
+  useEffect(() => {
+    dispatch(
+      updateMenuItemPath({
+        index: 6,
+        path: `/courses/${id}/edit`,
+      })
+    );
+    dispatch(
+      changeMenuItemVisibility({
+        index: 4,
+        show: true,
+      })
+    );
+    dispatch(
+      changeMenuItemVisibility({
+        index: 6,
+        show: true,
+      })
+    );
+    dispatch(
+      changeMenuItemVisibility({
+        index: 7,
+        show: true,
+      })
+    );
+  }, [dispatch, id]);
+
+  useEffect(() => {
+    if (courseIsSuccess) {
+      setFormData({
+        courseName: course.name ?? "",
+        courseShortName: course.short_name ?? "",
+        courseDescription: course.description ?? "",
+        courseStartDate:
+          new Date(course.start_date).toISOString().split("T")[0] ?? "",
+        isArchived: Boolean(course.is_archived) ?? false,
+      });
+    }
+  }, [courseIsSuccess]);
 
   const handleSubmit = async (values) => {
     setFormData(values);
 
-    try {
-      const { id: courseId } = await createCourse({
-        short_name: values.courseShortName,
-        name: values.courseName,
-        description: values.courseDescription,
-        start_date: values.courseStartDate,
-      }).unwrap();
+    await toast.promise(
+      editCourse({
+        courseId: id,
+        course: {
+          short_name: values.courseShortName,
+          name: values.courseName,
+          description: values.courseDescription,
+          start_date: values.courseStartDate,
+          is_archived: Number(values.isArchived).toString(),
+        },
+      }),
+      {
+        pending: "Updating course...",
+        success: {
+          render({ data }) {
+            return data.data.message;
+          },
+        },
+        error: "Error updating course",
+      }
+    );
 
-      return navigate(`/courses/${courseId}`);
-    } catch (error) {
-      console.error(error);
-    }
+    return navigate(`/courses/${id}`);
   };
 
   const handleCancel = () => {
@@ -55,20 +121,20 @@ const NewCourseForm = () => {
       courseShortName: "",
       courseDescription: "",
       courseStartDate: "",
-      courseStartTime: "",
     });
 
-    return navigate("/courses");
+    // return navigate("/courses");
   };
 
   return (
     <>
       <Formik
-        initialValues={{ ...formData }}
-        validationSchema={newCourseSchema}
+        initialValues={formData}
+        validationSchema={editCourseSchema}
         onSubmit={(values) => {
           handleSubmit(values);
         }}
+        enableReinitialize={true}
       >
         <Form className="vstack gap-3">
           <div className="form-floating">
@@ -119,7 +185,6 @@ const NewCourseForm = () => {
             />
           </div>
 
-          {/* <div className="input-group gap-2"> */}
           <div className="form-floating">
             <Field
               type="date"
@@ -136,22 +201,20 @@ const NewCourseForm = () => {
             />
           </div>
 
-          {/* <div className="form-floating">
-              <Field
-                type="time"
-                id="courseStartTime"
-                name="courseStartTime"
-                placeholder="Course Start Time"
-                className="form-control"
-              />
-              <label htmlFor="courseStartTime">Course Start Time</label>
-              <ErrorMessage
-                name="courseStartTime"
-                component="div"
-                className="ms-1 text-danger text-start form-text"
-              />
-            </div> */}
-          {/* </div> */}
+          <div className="d-flex gap-2">
+            <Field
+              type="checkbox"
+              id="isArchived"
+              name="isArchived"
+              className="form-check-input"
+            />
+            <label htmlFor="isArchived">Is archived?</label>
+            <ErrorMessage
+              name="isArchived"
+              component="div"
+              className="ms-1 text-danger text-start form-text"
+            />
+          </div>
 
           <div className="mt-2">
             {isError && (
@@ -175,7 +238,7 @@ const NewCourseForm = () => {
                 type="submit"
                 disabled={isLoading}
               >
-                Create Course
+                Save
               </button>
             </div>
           </div>
@@ -185,4 +248,4 @@ const NewCourseForm = () => {
   );
 };
 
-export default NewCourseForm;
+export default EditCourseForm;

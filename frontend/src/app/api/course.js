@@ -61,6 +61,14 @@ export const courseApi = api.injectEndpoints({
       }),
       invalidatesTags: ["UpcomingCourses", "UserCourses"],
     }),
+    editCourse: builder.mutation({
+      query: ({ courseId, course }) => ({
+        url: `courses/${courseId}`,
+        method: "PATCH",
+        body: course,
+      }),
+      invalidatesTags: ["UpcomingCourses", "UserCourses", "CourseDetail"],
+    }),
   }),
 });
 
@@ -71,4 +79,5 @@ export const {
   useJoinCourseMutation,
   useGetUpcomingCoursesQuery,
   useCreateCourseMutation,
+  useEditCourseMutation,
 } = courseApi;
