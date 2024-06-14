@@ -6,6 +6,7 @@ const initialState = {
     {
       index: 0,
       visible: true,
+      roles: ["student", "teacher", "admin"],
       title: "Home",
       icon: "house",
       path: "/dashboard",
@@ -13,26 +14,48 @@ const initialState = {
     {
       index: 1,
       visible: true,
+      roles: ["student", "teacher"],
       title: "Courses",
       icon: "school",
       children: [
         {
           index: 2,
           visible: true,
+          roles: ["student", "teacher"],
           title: "List",
           path: "/courses",
         },
         {
           index: 3,
           visible: true,
+          roles: ["student"],
           title: "Join",
           path: "/courses/join",
+        },
+        {
+          index: 5,
+          visible: false,
+          roles: ["teacher"],
+          title: "Exams",
+        },
+        {
+          index: 6,
+          visible: false,
+          roles: ["teacher"],
+          title: "Edit Course",
+        },
+        {
+          index: 7,
+          visible: false,
+          roles: ["teacher"],
+          title: "Archive Course",
         },
       ],
     },
     {
       index: 4,
       visible: false,
+      roles: ["student"],
       title: "Exams",
       // icon: "",
       path: "courses/:courseId/exams",

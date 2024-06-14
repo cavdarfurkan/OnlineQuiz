@@ -10,7 +10,6 @@ import {
 } from "./sidebarSlice";
 import { useDispatch } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
-import Cookies from "js-cookie";
 import { useEffect } from "react";
 
 const menuIcons = [
@@ -26,12 +25,36 @@ const menuIcons = [
 
 const Sidebar = () => {
   const dispatch = useDispatch();
-  const menuItems = useSelector((state) => state.sidebar.menuItems);
+  const user = useSelector((state) => state.user);
+
+  const menuItems = useSelector((state) => {
+    const items = state.sidebar.menuItems;
+    const selectedMenuItems = [];
+
+    for (let item of items) {
+      if (item.roles.includes(user.role)) {
+        if (item.children) {
+          const children = item.children.filter((child) =>
+            child.roles.includes(user.role)
+          );
+          if (children.length > 0) {
+            selectedMenuItems.push({
+              ...item,
+              children,
+            });
+          }
+        } else {
+          selectedMenuItems.push(item);
+        }
+      }
+    }
+    return selectedMenuItems;
+  });
+
   const showSidebar = useSelector((state) => state.sidebar.showSidebar);
   const expandedSections = useSelector(
     (state) => state.sidebar.expandedSections
   );
-  const user = JSON.parse(Cookies.get("user"));
 
   const location = useLocation();
   useEffect(() => {
