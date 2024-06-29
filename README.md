@@ -29,7 +29,7 @@ They should run separately to access the app.
 
 This system is built using 8.4.0 - MySQL Community Server
 
-Database connection details are stored as environment variables inside [.env](backend/.env) file. These values are used in database config file [config/db.js](backend/src/config/db.js).
+Database connection details are stored as environment variables inside [.env](backend/.env.example) file. These values are used in database config file [config/db.js](backend/src/config/db.js).
 
 Database creation and seeding data are automized with [utils/seed.js](backend/src/utils/seed.js) script. To run the script run the following npm script: `npm run seed-db`. This script drops & creates all the tables.
 
